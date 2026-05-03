@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=9">
+<link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body>
 <a class="skip" href="#protocol">Skip to protocol</a>
@@ -130,6 +130,22 @@ dnsmesh <span class="k">send</span> bob@dmp.dnsmesh.io <span class="s">"hi bob"<
 dnsmesh <span class="k">recv</span></pre>
     </div>
   </section>
+
+  <section class="warn-section" aria-label="Pre-audit notice">
+    <div class="shell">
+      <div class="box">
+        <span class="lbl">notice</span>
+        <p><b>The protocol is not yet audited.</b> Wire format, federation, identity and key rotation, and the formal spec have all shipped, but the cryptographic audit hasn&rsquo;t. Don&rsquo;t route confidentiality-critical traffic through DMP yet. Read <a href="https://github.com/oscarvalenzuelab/DNSMeshProtocol/blob/main/SECURITY.md" target="_blank" rel="noopener">SECURITY.md</a> before you trust this with anything that matters.</p>
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer>
+  <div class="shell row">
+    <span>DNS Mesh Protocol &middot; Apache&nbsp;2.0 &middot; reference impl in Python</span>
+    <span>↳ a name in DNS, not in an app store</span>
+  </div>
+</footer>
 </body>
 </html>
