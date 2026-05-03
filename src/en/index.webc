@@ -81,7 +81,9 @@ layout: base.webc
     <div class="prose-inner">
       <h2 @text="i18n[lang].prose.title"></h2>
       <p @html="i18n[lang].prose.p1"></p>
+      <p class="prose-metaphor" @html="i18n[lang].prose.metaphor"></p>
       <p @html="i18n[lang].prose.p2"></p>
+      <p @html="i18n[lang].prose.p3"></p>
     </div>
   </div>
 </section>

@@ -77,8 +77,10 @@
   },
   "prose": {
     "title": "Las lecturas son abiertas. Las escrituras, firmadas.",
-    "p1": "Esa asimetría es lo que elimina al gatekeeper. Es como un buzón en plena calle: cualquiera al pasar puede leer la dirección, pero solo quien tiene la llave puede meter algo adentro. En cualquier red, cualquiera puede resolver la identidad, los buzones y los fragmentos de un usuario — son registros TXT públicos servidos por DNS común y corriente. Las escrituras son otra cosa: paquetes RFC&nbsp;2136 DNS UPDATE firmados con una clave RFC&nbsp;8945 TSIG emitida por usuario.",
-    "p2": "Una sola llamada HTTPS emite esa clave en el primer registro. Después, ningún salto HTTPS interviene al publicar identidad, renovar prekeys o entregar fragmentos — es DNS de punta a punta. Cada nodo de la federación acepta esas actualizaciones firmadas de cualquier usuario cuya clave tenga registrada, lo que significa que <em>ningún nodo es canónico</em> y ninguno puede tomar una conversación de rehén."
+    "p1": "Esa asimetría es lo que elimina al gatekeeper.",
+    "metaphor": "Es como un buzón en plena calle: cualquiera al pasar puede leer la dirección, pero solo quien tiene la llave puede meter algo adentro.",
+    "p2": "En cualquier red, cualquiera puede resolver la identidad, los buzones y los fragmentos de un usuario — son registros TXT públicos servidos por DNS común y corriente. Las escrituras son otra cosa: paquetes RFC&nbsp;2136 DNS UPDATE firmados con una clave RFC&nbsp;8945 TSIG emitida por usuario.",
+    "p3": "Una sola llamada HTTPS emite esa clave en el primer registro. Después, ningún salto HTTPS interviene al publicar identidad, renovar prekeys o entregar fragmentos — es DNS de punta a punta. Cada nodo de la federación acepta esas actualizaciones firmadas de cualquier usuario cuya clave tenga registrada, lo que significa que <em>ningún nodo es canónico</em> y ninguno puede tomar una conversación de rehén."
   },
   "try": {
     "title": "Cinco minutos contra el nodo público.",

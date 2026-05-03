@@ -706,6 +706,20 @@ body.scrolled-past-hero .navbar-island::before { opacity: 1; }
 .prose-inner p:last-child { margin-bottom: 0; }
 .prose-inner p em { color: var(--accent); font-style: italic; }
 
+.prose-metaphor {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 2.4vw, 1.65rem) !important;
+  line-height: 1.4 !important;
+  letter-spacing: -0.012em;
+  color: var(--text) !important;
+  padding-left: clamp(1rem, 2.5vw, 1.6rem);
+  border-left: 2px solid var(--accent);
+  margin: clamp(1.6rem, 3.5vw, 2.4rem) 0 !important;
+  max-width: 34ch;
+}
+
 /* ============================================================
  * Try (terminal)
  * ============================================================ */

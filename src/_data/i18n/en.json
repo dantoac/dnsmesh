@@ -77,8 +77,10 @@
   },
   "prose": {
     "title": "Reads are open. Writes are signed.",
-    "p1": "That asymmetry is what removes the gatekeeper. Think of a mailbox on a public street: anyone walking by can read the address, but only the person with the key can drop something inside. On any network, anyone can resolve a user&rsquo;s identity, mailbox slots, and chunks — they&rsquo;re public TXT records served by ordinary DNS. Writes are different: they&rsquo;re RFC&nbsp;2136 DNS UPDATE packets signed with an RFC&nbsp;8945 TSIG key issued per user.",
-    "p2": "A single HTTPS call mints that key on first registration. After that, no HTTPS hop is involved in publishing identity, refreshing prekeys, or delivering chunks — it&rsquo;s DNS the whole way down. Every node in the federation accepts those signed updates from any user whose key it has on file, which means <em>no single node is canonical</em> and none of them can hold a conversation hostage."
+    "p1": "That asymmetry is what removes the gatekeeper.",
+    "metaphor": "Think of a mailbox on a public street: anyone walking by can read the address, but only the person with the key can drop something inside.",
+    "p2": "On any network, anyone can resolve a user&rsquo;s identity, mailbox slots, and chunks — they&rsquo;re public TXT records served by ordinary DNS. Writes are different: they&rsquo;re RFC&nbsp;2136 DNS UPDATE packets signed with an RFC&nbsp;8945 TSIG key issued per user.",
+    "p3": "A single HTTPS call mints that key on first registration. After that, no HTTPS hop is involved in publishing identity, refreshing prekeys, or delivering chunks — it&rsquo;s DNS the whole way down. Every node in the federation accepts those signed updates from any user whose key it has on file, which means <em>no single node is canonical</em> and none of them can hold a conversation hostage."
   },
   "try": {
     "title": "Five minutes against the public node.",
