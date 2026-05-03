@@ -1,12 +1,12 @@
 {
   "meta": {
     "title": "DNS Mesh Protocol",
-    "description": "Un protocolo abierto para mensajes cifrados de extremo a extremo entregados por DNS. Sin servidor central, sin app store, sin gatekeeper."
+    "description": "Mensajes cifrados de extremo a extremo a través de DNS — la misma red que resuelve cada nombre de dominio. Sin servidor central, sin app store, sin gatekeeper."
   },
   "nav": {
     "ariaLabel": "Navegación principal",
     "protocol": "Protocolo",
-    "try": "Pruébalo",
+    "try": "Probar",
     "spec": "Especificación",
     "directory": "Directorio",
     "github": "GitHub",
@@ -27,18 +27,18 @@
     "audit": "previo a auditoría externa"
   },
   "hero": {
-    "title": "Correo cifrado, entregado por la misma consulta que encuentra <em>google.com</em>.",
-    "lede": "DNS Mesh mueve mensajes cifrados de extremo a extremo entre dos personas sobre DNS plano — sin empresa de relevo, sin app store, sin cuenta que crear.",
+    "title": "Email cifrado, entregado por la misma consulta que encuentra <em>google.com</em>.",
+    "lede": "DNS Mesh transporta mensajes cifrados de extremo a extremo entre dos personas sobre DNS común — sin empresa intermediaria, sin app store, sin cuenta que crear.",
     "ledger": {
       "label": "Hechos del protocolo",
-      "lookups": "consultas TXT sostienen una conversación",
+      "lookups": "consultas TXT sostienen una conversación entera",
       "nodes": "nodos federándose desde 2025",
       "central": "servidores centrales"
     }
   },
   "anchor": {
     "label": "modelo mental",
-    "text": "Piénsalo como <em>correo federado</em>, salvo que corre sobre <em>DNS</em> en vez de SMTP."
+    "text": "Es como <em>email federado</em> — solo que corre sobre <em>DNS</em> en vez de SMTP."
   },
   "diagram": {
     "title": "Tres consultas sostienen una conversación.",
@@ -48,17 +48,17 @@
     "i": {
       "tag": "i.",
       "title": "Identidad",
-      "body": "Un nombre en DNS, no en una app store. Registros TXT públicos bajo el dominio del receptor sostienen las claves Ed25519 y X25519 de largo plazo."
+      "body": "Un nombre en DNS, no en una app store. Bob pregunta quién es Alice y su dominio responde con registros TXT públicos que contienen sus claves de largo plazo (Ed25519 para firmar, X25519 para intercambio de claves)."
     },
     "ii": {
       "tag": "ii.",
       "title": "Buzones",
-      "body": "Punteros por destinatario que el remitente escribe en su propia zona. Anuncian que hay un mensaje esperando y dónde viven sus fragmentos &mdash; UPDATEs firmados al entrar, TXT plano al salir."
+      "body": "Alice deja una nota en su propio buzón público avisando que hay un mensaje para Bob y dónde viven sus fragmentos. Escribe con UPDATEs firmados; cualquiera lee de vuelta TXT plano."
     },
     "iii": {
       "tag": "iii.",
       "title": "Texto cifrado",
-      "body": "Fragmentado, firmado con RFC 8945 TSIG, escrito con RFC 2136 DNS UPDATE. La cadena recursiva solo ve bytes opacos."
+      "body": "El contenido viaja cifrado — fragmentado, firmado con RFC 8945 TSIG, escrito con RFC 2136 DNS UPDATE. La cadena recursiva solo ve bytes opacos."
     }
   },
   "morph": {
@@ -77,25 +77,25 @@
   },
   "prose": {
     "title": "Las lecturas son abiertas. Las escrituras, firmadas.",
-    "p1": "Esa asimetría es lo que elimina al gatekeeper. Cualquiera, en cualquier red, puede resolver la identidad, los buzones y los fragmentos de cualquier usuario — los registros son entradas TXT públicas servidas por DNS común y corriente. Las mutaciones, en cambio, son paquetes RFC&nbsp;2136 DNS UPDATE firmados con una clave RFC&nbsp;8945 TSIG emitida por usuario.",
-    "p2": "Una sola llamada HTTPS emite la clave en el primer registro; después, ningún salto HTTPS interviene al publicar identidad, renovar prekeys o entregar fragmentos. Cada nodo de la federación acepta esas actualizaciones de cualquier usuario cuya clave conozca, lo que significa que <em>ningún nodo es canónico</em> y ninguno puede tomar una conversación de rehén."
+    "p1": "Esa asimetría es lo que elimina al gatekeeper. Es como un buzón en plena calle: cualquiera al pasar puede leer la dirección, pero solo quien tiene la llave puede meter algo adentro. En cualquier red, cualquiera puede resolver la identidad, los buzones y los fragmentos de un usuario — son registros TXT públicos servidos por DNS común y corriente. Las escrituras son otra cosa: paquetes RFC&nbsp;2136 DNS UPDATE firmados con una clave RFC&nbsp;8945 TSIG emitida por usuario.",
+    "p2": "Una sola llamada HTTPS emite esa clave en el primer registro. Después, ningún salto HTTPS interviene al publicar identidad, renovar prekeys o entregar fragmentos — es DNS de punta a punta. Cada nodo de la federación acepta esas actualizaciones firmadas de cualquier usuario cuya clave tenga registrada, lo que significa que <em>ningún nodo es canónico</em> y ninguno puede tomar una conversación de rehén."
   },
   "try": {
     "title": "Cinco minutos contra el nodo público.",
     "ref": "§ primeros pasos",
-    "intro": "El nodo de referencia en <code>dnsmesh.io</code> es de registro abierto y cumple los roles de bootstrap-seed y claim-provider que otros nodos toman por defecto. Auto-hospedarse da las mismas capacidades — ambos modos interoperan sobre DNS, porque el cable es el contrato.",
+    "intro": "El nodo de referencia en <code>dnsmesh.io</code> es de registro abierto y cumple los roles de bootstrap-seed y claim-provider que otros nodos toman por defecto — así cualquiera puede probar DMP sin levantar nada propio. Auto-hospedarse da las mismas capacidades; ambos modos interoperan sobre DNS, porque el cable es el contrato.",
     "ariaLabel": "Comandos de instalación y primer mensaje"
   },
   "warn": {
     "ariaLabel": "Aviso previo a auditoría",
     "label": "aviso",
-    "lead": "El protocolo aún no está auditado.",
-    "body": "Formato del cable, federación, identidad y rotación de claves, y la especificación formal ya están publicados, pero la auditoría criptográfica no. No enrutes tráfico crítico de confidencialidad por DMP todavía. Lee",
+    "lead": "El protocolo aún no tiene auditoría externa.",
+    "body": "Formato del cable, federación, identidad, rotación de claves y la especificación formal ya están publicados — la auditoría criptográfica no. Hasta que llegue, conviene no enrutar tráfico crítico de confidencialidad por DMP. Leer",
     "linkText": "SECURITY.md",
     "tail": "antes de confiarle algo que importe."
   },
   "footer": {
-    "tagline": "Un protocolo abierto para mensajes cifrados de extremo a extremo entregados por DNS.",
+    "tagline": "Mensajes cifrados de extremo a extremo, entregados por DNS. Protocolo abierto, sin gatekeeper.",
     "navAriaLabel": "Navegación del pie",
     "support": "Obtener soporte",
     "legalAriaLabel": "Legal",

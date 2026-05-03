@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "DNS Mesh Protocol",
-    "description": "An open protocol for end-to-end encrypted messages delivered over DNS. No central server, no app store, no gatekeeper."
+    "description": "Send end-to-end encrypted messages over DNS — the same network that resolves every domain name. No central server, no app store, no gatekeeper."
   },
   "nav": {
     "ariaLabel": "Primary navigation",
@@ -27,18 +27,18 @@
     "audit": "pre-external-audit"
   },
   "hero": {
-    "title": "Encrypted mail, delivered by the same lookup that finds <em>google.com</em>.",
-    "lede": "DNS Mesh moves end-to-end encrypted messages between two people over plain DNS — no relay company, no app store, no account to create.",
+    "title": "Encrypted email, delivered by the same lookup that finds <em>google.com</em>.",
+    "lede": "DNS Mesh carries end-to-end encrypted messages between two people over ordinary DNS — no relay company in the middle, no app store, no account to sign up for.",
     "ledger": {
       "label": "Protocol facts",
-      "lookups": "TXT lookups carry a conversation",
+      "lookups": "TXT lookups carry a whole conversation",
       "nodes": "nodes federating since 2025",
       "central": "central servers"
     }
   },
   "anchor": {
     "label": "mental model",
-    "text": "Think of it as <em>federated email</em>, except it runs on <em>DNS</em> instead of SMTP."
+    "text": "Think of it as <em>federated email</em> — only it rides on <em>DNS</em> instead of SMTP."
   },
   "diagram": {
     "title": "Three lookups carry a conversation.",
@@ -48,17 +48,17 @@
     "i": {
       "tag": "i.",
       "title": "Identity",
-      "body": "A name in DNS, not in an app store. Public TXT records under the recipient&rsquo;s domain hold the long-term Ed25519 and X25519 keys."
+      "body": "A name in DNS, not in an app store. Bob asks who Alice is and her domain answers with public TXT records holding her long-term keys (Ed25519 for signing, X25519 for key exchange)."
     },
     "ii": {
       "tag": "ii.",
       "title": "Mailbox slots",
-      "body": "Per-recipient pointers the sender writes into their own zone. They announce that a message is waiting and where its chunks live &mdash; signed UPDATEs going in, plain TXT coming back out."
+      "body": "Alice leaves a note in her own public mailbox saying a message for Bob is waiting and where its chunks live. She writes with signed UPDATEs; anyone reads back plain TXT."
     },
     "iii": {
       "tag": "iii.",
       "title": "Ciphertext",
-      "body": "Chunked, signed via RFC 8945 TSIG, written with RFC 2136 DNS UPDATE. The recursive chain only ever sees opaque bytes."
+      "body": "The contents travel encrypted — chunked, signed via RFC 8945 TSIG, written with RFC 2136 DNS UPDATE. The recursive chain only ever sees opaque bytes."
     }
   },
   "morph": {
@@ -77,25 +77,25 @@
   },
   "prose": {
     "title": "Reads are open. Writes are signed.",
-    "p1": "That asymmetry is what removes the gatekeeper. Anyone, on any network, can resolve any user&rsquo;s identity, mailbox slots, and chunks — the records are public TXT entries served by ordinary DNS. Mutations, on the other hand, are RFC&nbsp;2136 DNS UPDATE packets signed with an RFC&nbsp;8945 TSIG key issued per user.",
-    "p2": "One HTTPS call mints the key on first registration; after that, no HTTPS hop is involved in publishing identity, refreshing prekeys, or delivering chunks. Every node in the federation accepts those updates from any user whose key it knows about, which means <em>no single node is canonical</em> and none of them can hold a conversation hostage."
+    "p1": "That asymmetry is what removes the gatekeeper. Think of a mailbox on a public street: anyone walking by can read the address, but only the person with the key can drop something inside. On any network, anyone can resolve a user&rsquo;s identity, mailbox slots, and chunks — they&rsquo;re public TXT records served by ordinary DNS. Writes are different: they&rsquo;re RFC&nbsp;2136 DNS UPDATE packets signed with an RFC&nbsp;8945 TSIG key issued per user.",
+    "p2": "A single HTTPS call mints that key on first registration. After that, no HTTPS hop is involved in publishing identity, refreshing prekeys, or delivering chunks — it&rsquo;s DNS the whole way down. Every node in the federation accepts those signed updates from any user whose key it has on file, which means <em>no single node is canonical</em> and none of them can hold a conversation hostage."
   },
   "try": {
     "title": "Five minutes against the public node.",
     "ref": "§ getting started",
-    "intro": "The reference node at <code>dnsmesh.io</code> is open registration and serves the bootstrap-seed and claim-provider roles other nodes default to. Self-hosting gets the same capabilities — both modes interoperate over DNS, because the wire is the contract.",
+    "intro": "The reference node at <code>dnsmesh.io</code> has open registration and provides the bootstrap-seed and claim-provider roles other nodes default to — so anyone can try DMP without standing anything up. Self-hosting gets the same capabilities; both modes interoperate over DNS, because the wire is the contract.",
     "ariaLabel": "Install and first-message commands"
   },
   "warn": {
     "ariaLabel": "Pre-audit notice",
     "label": "notice",
-    "lead": "The protocol is not yet audited.",
-    "body": "Wire format, federation, identity and key rotation, and the formal spec have all shipped, but the cryptographic audit hasn&rsquo;t. Don&rsquo;t route confidentiality-critical traffic through DMP yet. Read",
+    "lead": "The protocol has not been externally audited yet.",
+    "body": "Wire format, federation, identity, key rotation, and the formal spec have all shipped — the cryptographic audit has not. Until it lands, don&rsquo;t route confidentiality-critical traffic through DMP. Read",
     "linkText": "SECURITY.md",
-    "tail": "before you trust this with anything that matters."
+    "tail": "before trusting this with anything that matters."
   },
   "footer": {
-    "tagline": "An open protocol for end-to-end encrypted messages delivered over DNS.",
+    "tagline": "End-to-end encrypted messages, delivered over DNS. Open protocol, no gatekeeper.",
     "navAriaLabel": "Footer navigation",
     "support": "Get support",
     "legalAriaLabel": "Legal",
