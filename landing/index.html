@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DNS Mesh Protocol</title>
+<meta name="description" content="An open protocol for end-to-end encrypted messages delivered over DNS. No central server, no app store, no gatekeeper.">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..600,30..100;1,9..144,300..600,30..100&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=2">
+</head>
+<body>
+
+<header class="top">
+  <div class="shell row">
+    <a href="/" class="brand">DNSMesh</a>
+    <nav>
+      <a href="#try">Try it</a>
+      <a href="https://oscarvalenzuelab.github.io/DNSMeshProtocol/protocol" target="_blank" rel="noopener">Spec</a>
+      <a href="https://oscarvalenzuelab.github.io/DNSMeshProtocol/" target="_blank" rel="noopener">Docs</a>
+      <a href="https://github.com/oscarvalenzuelab/DNSMeshProtocol" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="prose shell">
+
+  <p class="dateline">An open protocol &middot; pre-external-audit &middot; <span>v0.5.x</span></p>
+
+  <h1>Encrypted messages, delivered by the same lookup that finds <span class="dot">google.com</span>.</h1>
+
+  <p class="lede">
+    DNS Mesh Protocol moves end-to-end encrypted messages between two
+    people over plain DNS. The recipient looks you up the same way every
+    computer looks up any other domain &mdash; through the recursive chain
+    that already runs on your network, with no app store, no relay
+    company, and no account to create.
+  </p>
+
+  <p>
+    Every messaging product you&rsquo;ve used puts a single company in the
+    middle of every conversation. They sit on the wire. They can be
+    subpoenaed, breached, blocked, deplatformed, or simply turned off.
+    DMP replaces that company with the DNS recursive chain, which has
+    no single owner and which every device on the internet trusts
+    implicitly all day, every day. If DNS resolves on your network,
+    DMP works on your network.
+  </p>
+
+  <p class="bigtype">
+    Three TXT lookups carry an entire conversation.
+  </p>
+
+  <p>
+    The first lookup pulls the recipient&rsquo;s long-term Ed25519 and X25519
+    public keys from a TXT record under their domain. The second pulls
+    the encrypted mailbox slots they&rsquo;re currently advertising. The
+    third pulls the ciphertext chunks themselves. Plaintext is derived
+    locally; the recursive chain only ever sees opaque bytes routed
+    through whatever caches the message happens to traverse.
+  </p>
+
+  <pre class="diagram" aria-label="protocol shape">
+sender                  recursive DNS                  recipient
+   │                          │                            │
+   │   <span class="d-q">TXT _dnsmesh-id.bob.dmp.io</span>      │                            │
+   ├─────────────────────────►│ ──── cached, like any ────►│
+   │   <span class="d-r">pubkey + prekey</span>                │                            │
+   │◄─────────────────────────│                            │
+   │                          │                            │
+   │   <span class="d-w">DNS UPDATE  +  TSIG signed</span>     │                            │
+   ├─────────────────────────►│ ────── authenticated ─────►│  <i>store ciphertext chunk</i>
+   │                          │                            │
+   │                          │   <span class="d-q">TXT _dnsmesh-chunk-7f.…</span>     │
+   │                          │◄───────── plain ───────────┤
+   │                          │   <span class="d-r">ciphertext</span>                  │
+   │                          │ ──────────────────────────►│
+  </pre>
+
+  <p>
+    Reads are open and writes are signed. That asymmetry is what
+    removes the gatekeeper. Anyone, on any network, can resolve any
+    user&rsquo;s identity, mailbox slots, and chunks &mdash; the records are
+    public TXT entries served by ordinary DNS. Mutations, on the
+    other hand, are RFC&nbsp;2136 DNS UPDATE packets signed with an
+    RFC&nbsp;8945 TSIG key issued per user. One HTTPS call mints the
+    key on first registration; after that, no HTTPS hop is involved
+    in publishing identity, refreshing prekeys, or delivering chunks.
+    Every node in the federation accepts those updates from any user
+    whose key it knows about, which means no single node is canonical
+    and none of them can hold a conversation hostage.
+  </p>
+
+  <h2 id="try">Five minutes against the public node.</h2>
+
+  <p>
+    The reference node at <code>dnsmesh.io</code> is open registration
+    and serves the bootstrap-seed and claim-provider roles other nodes
+    default to. Self-hosting gets the same capabilities through
+    <code>deploy/native-ubuntu/install.sh</code>; both modes interoperate
+    over DNS, because the wire is the contract.
+  </p>
+
+  <pre class="codeblock"><span class="lbl">terminal</span><span class="c"># install</span>
+pipx install dnsmesh
+
+<span class="c"># the passphrase derives your Ed25519 + X25519 keypair via Argon2id.</span>
+<span class="c"># lose it and you lose the identity. there is no recovery.</span>
+read -rs <span class="v">DMP_PASSPHRASE</span>; export <span class="v">DMP_PASSPHRASE</span>
+
+<span class="c"># mint a TSIG key, then publish your identity over signed DNS UPDATE</span>
+dnsmesh <span class="k">init</span> alice <span class="p">--domain</span> dmp.dnsmesh.io <span class="p">--endpoint</span> <span class="s">https://dnsmesh.io</span>
+dnsmesh tsig <span class="k">register</span> <span class="p">--node</span> dnsmesh.io
+dnsmesh identity <span class="k">publish</span>
+dnsmesh identity <span class="k">refresh-prekeys</span>
+
+<span class="c"># talk to someone who&rsquo;s already published</span>
+dnsmesh identity <span class="k">fetch</span> bob@dmp.dnsmesh.io <span class="p">--add</span>
+dnsmesh <span class="k">send</span> bob@dmp.dnsmesh.io <span class="s">"hi bob"</span>
+dnsmesh <span class="k">recv</span></pre>
+
+  <p class="aside">
+    Curious what a node is publishing right now?
+    <code>dig _dnsmesh-heartbeat.dmp.dnsmesh.io TXT +short</code>
+    returns the live heartbeat. A signature-verified directory of
+    every node currently advertising on the public DNS chain is
+    rebuilt every thirty minutes from a federated seed list, and
+    lives at
+    <a href="https://ovalenzuela.com/DNSMeshProtocol/directory/" target="_blank" rel="noopener">ovalenzuela.com/DNSMeshProtocol/directory</a>.
+  </p>
+
+  <hr>
+
+  <p class="warn">
+    <b>The protocol is not yet audited.</b>
+    Wire format, federation, identity and key rotation, multi-tenant
+    auth, and the formal spec have all shipped, but the cryptographic
+    audit hasn&rsquo;t. Don&rsquo;t route confidentiality-critical traffic
+    through DMP yet. Read
+    <a href="https://github.com/oscarvalenzuelab/DNSMeshProtocol/blob/main/SECURITY.md" target="_blank" rel="noopener">SECURITY.md</a>
+    before you trust this with anything that matters.
+  </p>
+
+  <p class="next">
+    Read the
+    <a href="https://oscarvalenzuelab.github.io/DNSMeshProtocol/protocol" target="_blank" rel="noopener">protocol specification</a>,
+    follow the
+    <a href="https://oscarvalenzuelab.github.io/DNSMeshProtocol/getting-started" target="_blank" rel="noopener">getting-started walkthrough</a>,
+    deploy
+    <a href="https://oscarvalenzuelab.github.io/DNSMeshProtocol/deployment" target="_blank" rel="noopener">a node of your own</a>,
+    or read the source on
+    <a href="https://github.com/oscarvalenzuelab/DNSMeshProtocol" target="_blank" rel="noopener">GitHub</a>.
+  </p>
+
+</main>
+
+<footer class="shell">
+  <span>DNS Mesh Protocol &middot; Apache&nbsp;2.0 &middot; reference implementation in Python</span>
+</footer>
+
+</body>
+</html>
