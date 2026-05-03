@@ -61,6 +61,20 @@
       "body": "Fragmentado, firmado con RFC 8945 TSIG, escrito con RFC 2136 DNS UPDATE. La cadena recursiva solo ve bytes opacos."
     }
   },
+  "morph": {
+    "lane": {
+      "alice": "alice · corre un nodo",
+      "chain": "cadena dns pública",
+      "bob": "bob · cualquier resolver"
+    },
+    "p1Cached": "cacheado, como cualquiera →",
+    "p1Reply": "← pubkey + prekey",
+    "p2Verified": "verificado en el nodo",
+    "p2Stored": "guardado en el nodo de alice",
+    "p2Noop": "— sin salto recursivo —",
+    "p3Cached": "cacheado, como cualquiera →",
+    "p3Deliver": "← texto cifrado"
+  },
   "prose": {
     "title": "Las lecturas son abiertas. Las escrituras, firmadas.",
     "p1": "Esa asimetría es lo que elimina al gatekeeper. Cualquiera, en cualquier red, puede resolver la identidad, los buzones y los fragmentos de cualquier usuario — los registros son entradas TXT públicas servidas por DNS común y corriente. Las mutaciones, en cambio, son paquetes RFC&nbsp;2136 DNS UPDATE firmados con una clave RFC&nbsp;8945 TSIG emitida por usuario.",

@@ -61,6 +61,20 @@
       "body": "Chunked, signed via RFC 8945 TSIG, written with RFC 2136 DNS UPDATE. The recursive chain only ever sees opaque bytes."
     }
   },
+  "morph": {
+    "lane": {
+      "alice": "alice · runs a node",
+      "chain": "public dns chain",
+      "bob": "bob · any resolver"
+    },
+    "p1Cached": "cached, like any →",
+    "p1Reply": "← pubkey + prekey",
+    "p2Verified": "verified at node",
+    "p2Stored": "stored on alice's node",
+    "p2Noop": "— no recursive hop —",
+    "p3Cached": "cached, like any →",
+    "p3Deliver": "← ciphertext"
+  },
   "prose": {
     "title": "Reads are open. Writes are signed.",
     "p1": "That asymmetry is what removes the gatekeeper. Anyone, on any network, can resolve any user&rsquo;s identity, mailbox slots, and chunks — the records are public TXT entries served by ordinary DNS. Mutations, on the other hand, are RFC&nbsp;2136 DNS UPDATE packets signed with an RFC&nbsp;8945 TSIG key issued per user.",

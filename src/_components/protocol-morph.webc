@@ -1,9 +1,9 @@
 <div class="protocol-stage" aria-hidden="true">
   <div class="morph morph--dm">
     <div class="dm-lanes">
-      <span class="dm-lane-label">alice · runs a node</span>
-      <span class="dm-lane-label">public dns chain</span>
-      <span class="dm-lane-label">bob · any resolver</span>
+      <span class="dm-lane-label" @text="morph.lane.alice"></span>
+      <span class="dm-lane-label" @text="morph.lane.chain"></span>
+      <span class="dm-lane-label" @text="morph.lane.bob"></span>
     </div>
 
     <div class="dm-rail dm-rail--1"></div>
@@ -13,23 +13,23 @@
     <!-- Phase 1: identity lookup -->
     <div class="dm-phase dm-phase--1">
       <span class="dm-arrow dm-arrow--query">TXT id-a1b2c3d4.bob.dmp.io →</span>
-      <span class="dm-arrow dm-arrow--cached">cached, like any →</span>
-      <span class="dm-arrow dm-arrow--reply">← pubkey + prekey</span>
+      <span class="dm-arrow dm-arrow--cached" @text="morph.p1Cached"></span>
+      <span class="dm-arrow dm-arrow--reply" @text="morph.p1Reply"></span>
     </div>
 
     <!-- Phase 2: signed write — direct to alice's node, no recursive hop -->
     <div class="dm-phase dm-phase--2">
       <span class="dm-arrow dm-arrow--update">DNS UPDATE + TSIG →</span>
-      <span class="dm-arrow dm-arrow--auth">verified at node</span>
-      <span class="dm-store">stored on alice's node</span>
-      <span class="dm-arrow dm-arrow--noop">— no recursive hop —</span>
+      <span class="dm-arrow dm-arrow--auth" @text="morph.p2Verified"></span>
+      <span class="dm-store" @text="morph.p2Stored"></span>
+      <span class="dm-arrow dm-arrow--noop" @text="morph.p2Noop"></span>
     </div>
 
     <!-- Phase 3: recipient fetch (recipient walks sender's zone) -->
     <div class="dm-phase dm-phase--3">
       <span class="dm-arrow dm-arrow--chunk">← TXT chunk-1-7f.alice.dmp.io</span>
-      <span class="dm-arrow dm-arrow--plain">cached, like any →</span>
-      <span class="dm-arrow dm-arrow--deliver">← ciphertext</span>
+      <span class="dm-arrow dm-arrow--plain" @text="morph.p3Cached"></span>
+      <span class="dm-arrow dm-arrow--deliver" @text="morph.p3Deliver"></span>
     </div>
 
     <div class="dm-pips">

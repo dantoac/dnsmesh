@@ -54,7 +54,7 @@ layout: base.webc
       <span class="section-ref" @text="i18n[lang].diagram.ref"></span>
     </div>
 
-    <protocol-morph></protocol-morph>
+    <protocol-morph :morph="i18n[lang].morph"></protocol-morph>
 
     <div class="three-up">
       <div class="three-col">
