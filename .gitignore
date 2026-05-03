@@ -4,3 +4,7 @@ node_modules/
 _site/
 .playwright-mcp/
 *.log
+
+# transient screenshots from playwright runs
+morph-*.png
+.playwright-mcp/
