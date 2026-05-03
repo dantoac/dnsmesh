@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=8">
+<link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body>
 <a class="skip" href="#protocol">Skip to protocol</a>
@@ -103,6 +103,32 @@
     <h2>Reads are open. Writes are signed.</h2>
     <p>That asymmetry is what removes the gatekeeper. Anyone, on any network, can resolve any user&rsquo;s identity, mailbox slots, and chunks &mdash; the records are public TXT entries served by ordinary DNS. Mutations, on the other hand, are RFC&nbsp;2136 DNS UPDATE packets signed with an RFC&nbsp;8945 TSIG key issued per user.</p>
     <p>One HTTPS call mints the key on first registration; after that, no HTTPS hop is involved in publishing identity, refreshing prekeys, or delivering chunks. Every node in the federation accepts those updates from any user whose key it knows about, which means <em>no single node is canonical</em> and none of them can hold a conversation hostage.</p>
+  </section>
+
+  <section class="try" id="try">
+    <div class="shell">
+      <div class="header">
+        <h2>Five minutes against the public node.</h2>
+        <span class="ref">§ getting started</span>
+      </div>
+      <p>The reference node at <code>dnsmesh.io</code> is open registration and serves the bootstrap-seed and claim-provider roles other nodes default to. Self-hosting gets the same capabilities &mdash; both modes interoperate over DNS, because the wire is the contract.</p>
+      <pre class="terminal" aria-label="Install and first-message commands"><span class="c"># install</span>
+pipx install dnsmesh
+
+<span class="c"># the passphrase derives your Ed25519 + X25519 keypair via Argon2id.</span>
+<span class="c"># lose it and you lose the identity. there is no recovery.</span>
+read -rs <span class="v">DMP_PASSPHRASE</span>; export <span class="v">DMP_PASSPHRASE</span>
+
+<span class="c"># mint a TSIG key, then publish your identity over signed DNS UPDATE</span>
+dnsmesh <span class="k">init</span> alice <span class="p">--domain</span> dmp.dnsmesh.io <span class="p">--endpoint</span> <span class="s">https://dnsmesh.io</span>
+dnsmesh tsig <span class="k">register</span> <span class="p">--node</span> dnsmesh.io
+dnsmesh identity <span class="k">publish</span>
+dnsmesh identity <span class="k">refresh-prekeys</span>
+
+<span class="c"># talk to someone who&rsquo;s already published</span>
+dnsmesh <span class="k">send</span> bob@dmp.dnsmesh.io <span class="s">"hi bob"</span>
+dnsmesh <span class="k">recv</span></pre>
+    </div>
   </section>
 </main>
 </body>
