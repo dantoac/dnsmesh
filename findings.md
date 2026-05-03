@@ -57,8 +57,100 @@
 | Rotated `-2deg` "Pre-audit" stamp | callout | text-only `<p class="warn">` |
 | Manifesto "Four principles i/ii/iii/iv" | section | absorbed into prose paragraph |
 
+## i18n strategy options
+
+User confirmed (2026-05-03 session 3): **English is the canonical source, ES is a faithful translation, more languages possible later.**
+
+Three viable approaches for a static-first site whose deploy target is still undecided:
+
+| Option | How it works | Pros | Cons |
+|---|---|---|---|
+| **(a) Dual static files** | `index.html` (EN) + `es/index.html` (ES). Each is a complete page; a small JS toggles via `location` and persists in `localStorage`. | Trivial to host on any static target. Crawlable per-language. Works without JS. Simplest mental model. | Two files to keep in sync — copy drift risk if discipline slips. |
+| **(b) Build-time render** | Single source (JSON/YAML dict + Jinja-style template) renders to both files at build time. Could be a 30-line Python script. | Single source of truth, no drift. Easy to add a 3rd language. | Requires a build step → contradicts the current "drop a folder" simplicity. Couples i18n decision to Phase 6. |
+| **(c) Client-side swap** | One HTML with `data-i18n="key"` attributes; tiny JS loads `en.json`/`es.json` and swaps text on click. | One HTML file. No build. Easy to extend. | Requires JS for translated content (FOUC + bad SEO for ES). Bots see only EN. Worst for accessibility/crawlability. |
+
+**Decision (2026-05-03 session 3, post-recommendation):** user chose **(b) build-time render via Eleventy 3.x**. The "no build chain" ethos is relaxed in exchange for: single source of truth for shared strings, idiomatic i18n via the bundled `I18nPlugin`, painless 3rd-language addition later, and a clean platform for the adjacent surfaces in Phase 7 (spec, getting-started). See "Eleventy migration plan" below.
+
+Open sub-questions before implementing:
+
+- URL shape: `/` (EN) + `/es/` via `addUrlTransform`, **or** `/en/` + `/es/` with a root redirect/splash. Former is friendlier for the default audience; latter is more symmetric.
+- Default-language detection: respect `navigator.language` on first visit, persist override in `localStorage`. Never auto-redirect based on geolocation.
+- Switch placement: header (visible always) vs. footer (calmer, fits austere brand). Lean footer + `lang` attribute on the link.
+
+## Eleventy migration plan
+
+**Stack (verified via context7, 2026-05):**
+
+- Eleventy `^3.x` (stable since Oct 2024, ESM-friendly, Node 18+ required).
+- ESM config: `"type": "module"` in `package.json`, `eleventy.config.js` exporting default function.
+- Template language: **Nunjucks** (`.njk`) — recommended for broadest i18n example coverage; Liquid/WebC also viable.
+- i18n: bundled `I18nPlugin` imported from `@11ty/eleventy`. Provides `locale_url`, `locale_links` filters. Configure with `defaultLanguage: "en"`.
+
+**Canonical setup pattern:**
+
+```js
+// eleventy.config.js (ESM)
+import { I18nPlugin } from "@11ty/eleventy";
+
+export default function (eleventyConfig) {
+  eleventyConfig.addPlugin(I18nPlugin, { defaultLanguage: "en" });
+  eleventyConfig.addPassthroughCopy({ "src/styles.css": "styles.css" });
+  return { dir: { input: "src", output: "_site" } };
+}
+```
+
+**Layout pattern (in `src/_includes/base.njk`):**
+
+```njk
+<html lang="{{ page.lang or 'en' }}">
+<head>
+  {% for locale in locale_links(page.url) %}
+    <link rel="alternate" href="{{ locale.url }}" hreflang="{{ locale.lang }}">
+  {% endfor %}
+  ...
+</head>
+```
+
+**Proposed project tree:**
+
+```
+DNSMesh/
+  package.json              "type": "module", scripts: build/dev
+  eleventy.config.js
+  .gitignore                # adds node_modules/, _site/
+  src/
+    _includes/
+      base.njk              # shared <head>, <body>, footer with switcher
+    _data/
+      site.json             # site-wide constants (canonical URL, year, etc.)
+      i18n/
+        en.json             # shared strings: footer, nav, meta
+        es.json
+    en/
+      index.njk             # English landing (canonical)
+    es/
+      index.njk             # Spanish landing (faithful translation)
+    styles.css              # passthrough → /styles.css
+  landing/                  # KEPT during migration; deleted after parity confirmed
+  _site/                    # build output (gitignored)
+```
+
+**Migration sequence (proposed):**
+
+1. Scaffold Node project + `eleventy.config.js` + `.gitignore` updates.
+2. Build `base.njk` layout + footer switcher; verify dev server (`eleventy --serve`) renders an empty EN/ES page.
+3. Port `landing/index.html` content verbatim into `src/en/index.njk` extending `base.njk`. Visual parity with current dark redesign is the gate.
+4. Translate to `src/es/index.njk` (technical register, no domestication).
+5. Extract shared strings (footer label, "language", date format, meta description, nav) into `_data/i18n/{en,es}.json`.
+6. AA contrast + responsive sweep on both languages.
+7. Delete legacy `landing/` once both languages reach parity.
+8. Wire deploy to chosen target (Phase 6) — `_site/` is the artifact.
+
 ## Open questions for the user
 
 - **Hosting domain.** New domain vs. replacing `dnsmesh.io` root vs. subroute. Affects internal link targets and the relationship copy with the existing node page.
 - **DESIGN.md generation.** Run `$impeccable document` against `landing/styles.css` now (yes/no/later)?
 - **Build/deploy target.** GitHub Pages, Cloudflare Pages, Caddy on the existing node, or just static drop?
+- **i18n strategy.** Confirm (a) dual static files (`/` EN + `/es/` ES), or pick (b) or (c) above.
+- **Language switch placement.** Header vs. footer (recommendation: footer, matches austere brand).
+- **ES translator.** Does the user write ES copy, or does Claude draft and the user reviews?

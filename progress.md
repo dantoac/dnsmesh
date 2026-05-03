@@ -67,3 +67,114 @@
 - `docs/superpowers/plans/2026-05-03-landing-dark-redesign.md`
 - `task_plan.md`, `progress.md` (this entry)
 - `.gitignore` (new)
+
+## Session 3 — 2026-05-03 (planning resume)
+
+### Done
+
+- User invoked `planning-with-files` skill to resume planning workflow.
+- Confirmed planning files stay in **English (primary)**; planning is not a separate i18n surface.
+- New product constraint captured: **site must ship i18n with EN (canonical) + ES (faithful translation)**, more languages possible later.
+- Added Phase 6.5 (i18n) to `task_plan.md`.
+- Documented three i18n strategy options in `findings.md` with a recommendation (dual static files: `/` EN + `/es/` ES) and three sub-questions (URL shape, default detection, switch placement, ES translator role).
+
+### Pending decisions (waiting on user)
+
+1. Hosting domain (still open from Session 1).
+2. Build/deploy target (still open from Session 1).
+3. Real federation node count for hero ledger (still open from Session 2).
+4. **i18n strategy** — confirm dual-static-files recommendation or pick alternative.
+5. **Language switch placement** — header vs. footer (rec: footer).
+6. **ES translation authorship** — user writes ES, or Claude drafts + user reviews?
+
+### Files created or modified this session
+
+- `task_plan.md` (added Phase 6.5, updated Constraints + Current Status)
+- `findings.md` (added i18n strategy options + extended open questions)
+- `progress.md` (this entry)
+
+### Project relocation
+
+- Moved project from `/Users/daniel/code/DNSMesh/` → `/Users/daniel/code/AINVIRION/DNSMesh/` to consolidate under the AINVIRION umbrella. Git repo, planning files, and `landing/` preserved intact. All future paths reference the new location.
+
+### Pivot: Eleventy 3.x for i18n + structure
+
+- User chose to convert the static landing into an **Eleventy 3.x** project. Build chain is now in scope; the bundled `I18nPlugin` is the i18n vehicle.
+- Verified via context7 (`/11ty/11ty-website`) that Eleventy 3 stable (released Oct 2024) is the current line as of 2026-05; ESM-friendly, Node 18+, `I18nPlugin` is bundled and provides `locale_links`/`locale_url` filters.
+- Updated `task_plan.md` Phase 6.5 with Eleventy migration tasks and updated `findings.md` with the canonical setup pattern and proposed project tree.
+
+### Eleventy + WebC migration executed
+
+User confirmed: URL shape `/en/` + `/es/` (root redirects), template **WebC**, header = AInvirion island navbar, ES drafted by Claude / reviewed by user.
+
+- Installed `@11ty/eleventy@^3` (resolved to 3.1.5) + `@11ty/eleventy-plugin-webc@^0.11.2`.
+- Created project skeleton: `package.json` (ESM), `eleventy.config.js`, `.gitignore` (added `_site/`).
+- Data files: `src/_data/site.json` (canonical brand info), `src/_data/i18n/{en,es}.json` (full string bags), `src/{en,es}/{en,es}.11tydata.js` (sets `lang` per directory).
+- Layout `src/_includes/base.webc` — monolithic (navbar + main slot + footer inline) because WebC components in `_components/` did not inherit page data scope. Three WebC quirks logged in `task_plan.md` for future work.
+- Page templates `src/{en,es}/index.webc` (identical content; `lang` from directory data drives `i18n[lang]` lookups). Diagram and terminal blocks kept English (technical content per AInvirion i18n.md convention); only italic subtitles translated.
+- CSS migrated from `landing/styles.css` to `src/styles.css` with AInvirion semantic tokens (`--bg`, `--surface`, `--text`, `--accent`, `--border`, `--border-strong`, etc.) aliased over Midnight Archive (`--ink-*`, `--bg-*`, `--signal*`). Wide-screen tier system added (`--max-width` scales at 1440 / 1920 / 2560). Full island-navbar styles + two-tier footer styles + responsive sweep.
+- Navbar JS at `src/assets/js/navbar.js` — scroll-morph cache pattern from `~/code/AINVIRION/ainvirion_com/assets/js/app.js` with re-measurement after `document.fonts.ready` (per i18n width-cache caveat in `wide-screen-tiers.md`). Hamburger menu with focus-trap-ish click-outside and Escape-to-close.
+- Root `/` is a `src/index.njk` with `<meta http-equiv="refresh">` to `/en/` plus JS `navigator.language` detection.
+- Smoke test: `npm run build` produces 3 HTML files + passthrough assets. Dev server returns 200 on `/`, `/en/`, `/es/`, `/styles.css`, `/assets/js/navbar.js`. EN page 12.7KB, ES 13.1KB.
+- `landing/` legacy directory still in place pending user's browser verification of parity.
+
+### Pending decisions (waiting on user)
+
+1. Hosting domain (open since Session 1).
+2. Build/deploy target (Phase 6) — `_site/` is the artifact; any static host works.
+3. Real federation node count for hero ledger (open since Session 2).
+4. Browser parity verification on `/en/` and `/es/` before deleting legacy `landing/`.
+5. Spanish translation review pass.
+
+## Session 4 — 2026-05-03 (verificación + decisiones de despliegue)
+
+### Done
+
+- Browser sweep EN+ES con Playwright a 1280, 768, 375. Paridad de contenido confirmada. Navbar scroll-morph dispara `body.scrolled-past-hero` correctamente. Lang switcher renderiza pills EN/Español dentro del mobile menu como diseñado.
+- **Bug detectado:** `.island-menu` (`src/styles.css:461`) sin `z-index` — al abrir el hamburger en 375px el panel queda por debajo del hero, el texto se filtra encima y los links quedan ilegibles. Stacking context del padre `.navbar-island` (z-index:100) no es suficiente.
+- Favicon falta (404 en consola).
+- Decisiones lockeadas en sesión:
+  - **Diagrama → morph** del sistema AInvirion Product Theater (skill `ainvirion-morphs`). Reemplaza el ASCII actual y resuelve el overflow horizontal en 375.
+  - **Deploy → GitHub Pages** como primera vitrina; resuelve Phase 2 + Phase 6 por ahora.
+- Añadidas Phase 6.6 (morph) y Phase 6.7 (GitHub Pages) al `task_plan.md`.
+
+### Files modified this session
+
+- `task_plan.md` (Phase 6.5 cerrado parcial + bug logged; Phase 6.6 y 6.7 nuevas)
+- `progress.md` (esta entrada)
+
+### Done (parte 2 de la sesión: A → B → C ejecutado)
+
+**A — Fix mobile menu + favicon:**
+- `src/styles.css` — `.island-menu` recibió `z-index: 210` y bg cambiado de `var(--surface-90)` (alpha 0.9, hero filtraba) a `var(--surface-elevated)` sólido. Backdrop-filter eliminado del panel del dropdown.
+- `src/favicon.svg` (placeholder: cuadrado patinated brass sobre iron-gall ink), passthrough en config, `<link rel="icon">` en `base.webc`. 200 OK, console error de favicon eliminado.
+
+**B — Phase 6.6 morph del diagrama:**
+- Skill `ainvirion-morphs` aplicada. Adopté Product Theater patterns sin tabs (DNSMesh es producto único). Prefix `dm-`, ciclo 9s, 3 fases × 3s.
+- `src/_components/protocol-morph.webc` (componente WebC; `<webc:include>` literal NO funciona, vía oficial es `_components/` + `<component-name></component-name>`).
+- ~150 líneas CSS al final de `src/styles.css`: stage 16:9 (4:5 mobile), grid de 3 columnas (sender/DNS/recipient), lane heads con accent dots, rails verticales gradient-faded, fade per-phase con keyframes diferenciados (`dm-arrow-1/2/3` con ventanas opacity alineadas a su fase), store badge pop con scale, pip timeline al pie cambiando de border-strong a accent.
+- Reduced-motion fallback: muestra las 3 fases simultáneas con separadores dashed, stage colapsa a height auto.
+- Validado en navegador 1280 + 375, EN+ES paridad. Bug encontrado y corregido durante iteración: el `dm-arrow-fade` global solo cubría window 0-28% — fases 2/3 quedaban invisibles. Resuelto con keyframes per-phase.
+
+**C — Phase 6.7 GitHub Pages workflow:**
+- `.github/workflows/deploy.yml` — checkout + setup-node@v4 + npm ci + configure-pages@v5 (extrae base_path) + build con `ELEVENTY_PATH_PREFIX` env + upload-pages-artifact@v3 + deploy-pages@v4. Permissions: `contents:read`, `pages:write`, `id-token:write`. Concurrency group `pages`.
+- `eleventy.config.js` — lee `process.env.ELEVENTY_PATH_PREFIX` (default `/`), expone como global data `basePath` (siempre con trailing slash) y como `pathPrefix` en el return.
+- Todos los paths absolutos refactorizados a `${basePath}…`: favicon, CSS, JS, lang switchers, brand links, hreflang alternates, brand mark links en footer. `src/index.njk` reescrito con `{{ basePath }}` en meta-refresh, canonical, alternates y JS de detección.
+- Smoke local: `npm run build` (prefix `/`) y `ELEVENTY_PATH_PREFIX="/dnsmesh-site/" npm run build` generan paths esperados.
+
+### Pending (bloqueantes para deploy real)
+
+1. **Nombre del repo de GitHub** (sigue abierto). Workflow soporta ambos casos sin cambios.
+2. Habilitar GitHub Pages en Settings → Pages → Source: GitHub Actions.
+3. Decidir si el dominio público `dnsmeshprotocol.org` apunta al repo (DNS), o si por ahora se muestra solo en `*.github.io`.
+
+### Files created/modified (parte 2)
+
+- `src/styles.css` (z-index fix + ~150 líneas de morph CSS)
+- `src/favicon.svg` (nuevo)
+- `src/_components/protocol-morph.webc` (nuevo)
+- `src/en/index.webc`, `src/es/index.webc` (reemplazo del `<pre class="protocol">` por `<protocol-morph></protocol-morph>`)
+- `src/_includes/base.webc` (paths absolutos → `${basePath}…`, favicon link)
+- `src/index.njk` (redirect con `{{ basePath }}`)
+- `eleventy.config.js` (passthrough favicon, pathPrefix env, basePath global data)
+- `.github/workflows/deploy.yml` (nuevo)
