@@ -1,0 +1,40 @@
+<div class="protocol-stage" aria-hidden="true">
+  <div class="morph morph--dm">
+    <div class="dm-lanes">
+      <span class="dm-lane-label">sender</span>
+      <span class="dm-lane-label">recursive DNS</span>
+      <span class="dm-lane-label">recipient</span>
+    </div>
+
+    <div class="dm-rail dm-rail--1"></div>
+    <div class="dm-rail dm-rail--2"></div>
+    <div class="dm-rail dm-rail--3"></div>
+
+    <!-- Phase 1: identity lookup -->
+    <div class="dm-phase dm-phase--1">
+      <span class="dm-arrow dm-arrow--query">TXT _dnsmesh-id.bob.dmp.io →</span>
+      <span class="dm-arrow dm-arrow--cached">cached, like any →</span>
+      <span class="dm-arrow dm-arrow--reply">← pubkey + prekey</span>
+    </div>
+
+    <!-- Phase 2: signed write -->
+    <div class="dm-phase dm-phase--2">
+      <span class="dm-arrow dm-arrow--update">DNS UPDATE + TSIG signed →</span>
+      <span class="dm-arrow dm-arrow--auth">authenticated →</span>
+      <span class="dm-store">store ciphertext chunk</span>
+    </div>
+
+    <!-- Phase 3: recipient fetch -->
+    <div class="dm-phase dm-phase--3">
+      <span class="dm-arrow dm-arrow--chunk">TXT _dnsmesh-chunk-7f.…</span>
+      <span class="dm-arrow dm-arrow--plain">← plain</span>
+      <span class="dm-arrow dm-arrow--deliver">ciphertext →</span>
+    </div>
+
+    <div class="dm-pips">
+      <span class="dm-pip dm-pip--1"></span>
+      <span class="dm-pip dm-pip--2"></span>
+      <span class="dm-pip dm-pip--3"></span>
+    </div>
+  </div>
+</div>

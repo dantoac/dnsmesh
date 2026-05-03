@@ -1,0 +1,127 @@
+---
+layout: base.webc
+---
+<div class="strip" role="status" aria-label="Protocol status">
+  <div class="container row">
+    <span>
+      <span class="strip-arrow" aria-hidden="true">↳ </span>
+      <span @text="i18n[lang].strip.chain"></span>
+      <span> · </span>
+      <span @text="i18n[lang].strip.version.replace('{version}', site.version)"></span>
+      <span> · </span>
+      <span @text="i18n[lang].strip.federation"></span>
+    </span>
+    <span class="strip-audit"><b @text="i18n[lang].strip.audit"></b></span>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-lead">
+        <h1 @html="i18n[lang].hero.title"></h1>
+        <p class="hero-lede" @text="i18n[lang].hero.lede"></p>
+      </div>
+      <aside class="hero-ledger" :aria-label="i18n[lang].hero.ledger.label">
+        <div class="ledger-row">
+          <span class="ledger-num">3</span>
+          <span @text="i18n[lang].hero.ledger.lookups"></span>
+        </div>
+        <div class="ledger-row">
+          <span class="ledger-num">N</span>
+          <span @text="i18n[lang].hero.ledger.nodes"></span>
+        </div>
+        <div class="ledger-row">
+          <span class="ledger-num">0</span>
+          <span @text="i18n[lang].hero.ledger.central"></span>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="anchor">
+  <div class="container anchor-grid">
+    <span class="anchor-label" @text="i18n[lang].anchor.label"></span>
+    <p class="anchor-text" @html="i18n[lang].anchor.text"></p>
+  </div>
+</section>
+
+<section class="diagram-section" id="protocol">
+  <div class="container">
+    <div class="section-header">
+      <h2 @text="i18n[lang].diagram.title"></h2>
+      <span class="section-ref" @text="i18n[lang].diagram.ref"></span>
+    </div>
+
+    <protocol-morph></protocol-morph>
+
+    <div class="three-up">
+      <div class="three-col">
+        <span class="three-num" @text="i18n[lang].diagram.i.tag"></span>
+        <h3 @text="i18n[lang].diagram.i.title"></h3>
+        <p @html="i18n[lang].diagram.i.body"></p>
+      </div>
+      <div class="three-col">
+        <span class="three-num" @text="i18n[lang].diagram.ii.tag"></span>
+        <h3 @text="i18n[lang].diagram.ii.title"></h3>
+        <p @html="i18n[lang].diagram.ii.body"></p>
+      </div>
+      <div class="three-col">
+        <span class="three-num" @text="i18n[lang].diagram.iii.tag"></span>
+        <h3 @text="i18n[lang].diagram.iii.title"></h3>
+        <p @html="i18n[lang].diagram.iii.body"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="prose-section">
+  <div class="container">
+    <div class="prose-inner">
+      <h2 @text="i18n[lang].prose.title"></h2>
+      <p @html="i18n[lang].prose.p1"></p>
+      <p @html="i18n[lang].prose.p2"></p>
+    </div>
+  </div>
+</section>
+
+<section class="try" id="try">
+  <div class="container">
+    <div class="section-header">
+      <h2 @text="i18n[lang].try.title"></h2>
+      <span class="section-ref" @text="i18n[lang].try.ref"></span>
+    </div>
+    <p class="try-intro" @html="i18n[lang].try.intro"></p>
+    <pre class="terminal" :aria-label="i18n[lang].try.ariaLabel"><span class="c"># install</span>
+pipx install dnsmesh
+
+<span class="c"># the passphrase derives your Ed25519 + X25519 keypair via Argon2id.</span>
+<span class="c"># lose it and you lose the identity. there is no recovery.</span>
+read -rs <span class="v">DMP_PASSPHRASE</span>; export <span class="v">DMP_PASSPHRASE</span>
+
+<span class="c"># mint a TSIG key, then publish your identity over signed DNS UPDATE</span>
+dnsmesh <span class="k">init</span> alice <span class="p">--domain</span> dmp.dnsmesh.io <span class="p">--endpoint</span> <span class="s">https://dnsmesh.io</span>
+dnsmesh tsig <span class="k">register</span> <span class="p">--node</span> dnsmesh.io
+dnsmesh identity <span class="k">publish</span>
+dnsmesh identity <span class="k">refresh-prekeys</span>
+
+<span class="c"># talk to someone who's already published</span>
+dnsmesh <span class="k">send</span> bob@dmp.dnsmesh.io <span class="s">"hi bob"</span>
+dnsmesh <span class="k">recv</span></pre>
+  </div>
+</section>
+
+<section class="warn-section" :aria-label="i18n[lang].warn.ariaLabel">
+  <div class="container">
+    <div class="warn-box">
+      <span class="warn-label" @text="i18n[lang].warn.label"></span>
+      <p>
+        <b @text="i18n[lang].warn.lead"></b>
+        <span @html="' ' + i18n[lang].warn.body + ' '"></span>
+        <a :href="site.security" target="_blank" rel="noopener" @text="i18n[lang].warn.linkText"></a>
+        <span @text="' ' + i18n[lang].warn.tail"></span>
+      </p>
+    </div>
+  </div>
+</section>

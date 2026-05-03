@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "DNS Mesh Protocol",
+    "description": "Un protocolo abierto para mensajes cifrados de extremo a extremo entregados por DNS. Sin servidor central, sin app store, sin gatekeeper."
+  },
+  "nav": {
+    "ariaLabel": "Navegación principal",
+    "protocol": "Protocolo",
+    "try": "Pruébalo",
+    "spec": "Especificación",
+    "directory": "Directorio",
+    "github": "GitHub",
+    "skipToContent": "Saltar al protocolo",
+    "menuOpen": "Abrir menú de navegación",
+    "menuClose": "Cerrar menú de navegación",
+    "menuLabel": "Navegación móvil"
+  },
+  "lang": {
+    "label": "Idioma",
+    "toggleAriaLabel": "Elegir idioma",
+    "current": "Idioma actual"
+  },
+  "strip": {
+    "chain": "cadena dns pública",
+    "version": "v{version}",
+    "federation": "federación activa desde M9",
+    "audit": "previo a auditoría externa"
+  },
+  "hero": {
+    "title": "Correo cifrado, entregado por la misma consulta que encuentra <em>google.com</em>.",
+    "lede": "DNS Mesh mueve mensajes cifrados de extremo a extremo entre dos personas sobre DNS plano — sin empresa de relevo, sin app store, sin cuenta que crear.",
+    "ledger": {
+      "label": "Hechos del protocolo",
+      "lookups": "consultas TXT sostienen una conversación",
+      "nodes": "nodos federándose desde 2025",
+      "central": "servidores centrales"
+    }
+  },
+  "anchor": {
+    "label": "modelo mental",
+    "text": "Piénsalo como <em>correo federado</em>, salvo que corre sobre <em>DNS</em> en vez de SMTP."
+  },
+  "diagram": {
+    "title": "Tres consultas sostienen una conversación.",
+    "ref": "§ forma del protocolo",
+    "ariaLabel": "Diagrama de intercambio del protocolo",
+    "store": "guardar fragmento cifrado",
+    "i": {
+      "tag": "i.",
+      "title": "Identidad",
+      "body": "Un nombre en DNS, no en una app store. Registros TXT públicos bajo el dominio del receptor sostienen las claves Ed25519 y X25519 de largo plazo."
+    },
+    "ii": {
+      "tag": "ii.",
+      "title": "Buzones efímeros",
+      "body": "Prekeys con secrecía hacia adelante anunciados de la misma forma. Cualquiera en la cadena DNS pública puede tomarlos; solo el titular puede responder."
+    },
+    "iii": {
+      "tag": "iii.",
+      "title": "Texto cifrado",
+      "body": "Fragmentado, firmado con RFC 8945 TSIG, escrito con RFC 2136 DNS UPDATE. La cadena recursiva solo ve bytes opacos."
+    }
+  },
+  "prose": {
+    "title": "Las lecturas son abiertas. Las escrituras, firmadas.",
+    "p1": "Esa asimetría es lo que elimina al gatekeeper. Cualquiera, en cualquier red, puede resolver la identidad, los buzones y los fragmentos de cualquier usuario — los registros son entradas TXT públicas servidas por DNS común y corriente. Las mutaciones, en cambio, son paquetes RFC&nbsp;2136 DNS UPDATE firmados con una clave RFC&nbsp;8945 TSIG emitida por usuario.",
+    "p2": "Una sola llamada HTTPS emite la clave en el primer registro; después, ningún salto HTTPS interviene al publicar identidad, renovar prekeys o entregar fragmentos. Cada nodo de la federación acepta esas actualizaciones de cualquier usuario cuya clave conozca, lo que significa que <em>ningún nodo es canónico</em> y ninguno puede tomar una conversación de rehén."
+  },
+  "try": {
+    "title": "Cinco minutos contra el nodo público.",
+    "ref": "§ primeros pasos",
+    "intro": "El nodo de referencia en <code>dnsmesh.io</code> es de registro abierto y cumple los roles de bootstrap-seed y claim-provider que otros nodos toman por defecto. Auto-hospedarse da las mismas capacidades — ambos modos interoperan sobre DNS, porque el cable es el contrato.",
+    "ariaLabel": "Comandos de instalación y primer mensaje"
+  },
+  "warn": {
+    "ariaLabel": "Aviso previo a auditoría",
+    "label": "aviso",
+    "lead": "El protocolo aún no está auditado.",
+    "body": "Formato del cable, federación, identidad y rotación de claves, y la especificación formal ya están publicados, pero la auditoría criptográfica no. No enrutes tráfico crítico de confidencialidad por DMP todavía. Lee",
+    "linkText": "SECURITY.md",
+    "tail": "antes de confiarle algo que importe."
+  },
+  "footer": {
+    "tagline": "Un protocolo abierto para mensajes cifrados de extremo a extremo entregados por DNS.",
+    "navAriaLabel": "Navegación del pie",
+    "support": "Obtener soporte",
+    "legalAriaLabel": "Legal",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos del Servicio",
+    "copyright": "© {year} {company} | {locations}",
+    "license": "DNS Mesh Protocol · Apache 2.0 · implementación de referencia en Python"
+  }
+}

@@ -1,4 +1,6 @@
 .DS_Store
 .superpowers/
 node_modules/
+_site/
+.playwright-mcp/
 *.log

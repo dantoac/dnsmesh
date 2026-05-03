@@ -1,0 +1,19 @@
+{
+  "name": "dnsmesh-brand",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Brand site for the DNS Mesh Protocol — Eleventy + WebC, EN/ES i18n.",
+  "scripts": {
+    "build": "eleventy",
+    "dev": "eleventy --serve",
+    "clean": "rm -rf _site"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0",
+    "@11ty/eleventy-plugin-webc": "^0.11.2"
+  }
+}

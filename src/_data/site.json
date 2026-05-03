@@ -1,0 +1,17 @@
+{
+  "name": "DNS Mesh Protocol",
+  "shortName": "DNSMesh",
+  "url": "https://dnsmeshprotocol.org",
+  "year": 2026,
+  "version": "0.5.x",
+  "license": "Apache-2.0",
+  "github": "https://github.com/oscarvalenzuelab/DNSMeshProtocol",
+  "spec": "https://oscarvalenzuelab.github.io/DNSMeshProtocol/protocol",
+  "directory": "https://ovalenzuela.com/DNSMeshProtocol/directory/",
+  "security": "https://github.com/oscarvalenzuelab/DNSMeshProtocol/blob/main/SECURITY.md",
+  "support": "https://github.com/AInvirion/support/issues/new/choose",
+  "phone": "(425) 276-7365",
+  "phoneHref": "tel:+14252767365",
+  "company": "AInvirion",
+  "companyLocations": "Seattle, USA · Santiago, Chile"
+}

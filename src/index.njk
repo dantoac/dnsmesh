@@ -1,0 +1,29 @@
+---
+permalink: /index.html
+eleventyExcludeFromCollections: true
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DNS Mesh Protocol</title>
+<meta name="description" content="An open protocol for end-to-end encrypted messages delivered over DNS.">
+<meta http-equiv="refresh" content="0; url={{ basePath }}en/">
+<link rel="canonical" href="{{ basePath }}en/">
+<link rel="alternate" hreflang="en" href="{{ basePath }}en/">
+<link rel="alternate" hreflang="es" href="{{ basePath }}es/">
+<link rel="alternate" hreflang="x-default" href="{{ basePath }}en/">
+<script>
+(function () {
+  var base = {{ basePath | dump | safe }};
+  var supported = ["en", "es"];
+  var preferred = (navigator.language || "en").slice(0, 2).toLowerCase();
+  var target = supported.indexOf(preferred) >= 0 ? preferred : "en";
+  location.replace(base + target + "/");
+})();
+</script>
+</head>
+<body>
+<p>Redirecting to <a href="{{ basePath }}en/">/en/</a> · <a href="{{ basePath }}es/">/es/</a></p>
+</body>
+</html>
