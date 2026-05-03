@@ -162,11 +162,22 @@ User confirmed: URL shape `/en/` + `/es/` (root redirects), template **WebC**, h
 - Todos los paths absolutos refactorizados a `${basePath}…`: favicon, CSS, JS, lang switchers, brand links, hreflang alternates, brand mark links en footer. `src/index.njk` reescrito con `{{ basePath }}` en meta-refresh, canonical, alternates y JS de detección.
 - Smoke local: `npm run build` (prefix `/`) y `ELEVENTY_PATH_PREFIX="/dnsmesh-site/" npm run build` generan paths esperados.
 
-### Pending (bloqueantes para deploy real)
+### Pending
 
-1. **Nombre del repo de GitHub** (sigue abierto). Workflow soporta ambos casos sin cambios.
-2. Habilitar GitHub Pages en Settings → Pages → Source: GitHub Actions.
-3. Decidir si el dominio público `dnsmeshprotocol.org` apunta al repo (DNS), o si por ahora se muestra solo en `*.github.io`.
+1. Validación visual fina por parte del usuario en https://dantoac.github.io/dnsmesh/.
+2. Migración del repo a `AInvirion/dnsmesh` cuando esté listo (cambia URL a `https://ainvirion.github.io/dnsmesh/` — workflow auto-ajusta pathPrefix).
+3. Decisión de dominio público (`dnsmeshprotocol.org` u otro) — bloqueante para SEO/canonical.
+
+### Deploy ejecutado
+
+- `gh repo create dantoac/dnsmesh --public --source=. --remote=origin` → `https://github.com/dantoac/dnsmesh`
+- 3 commits pusheados a `main`: migración Eleventy + i18n, deploy workflow, planning files.
+- `gh api -X POST repos/dantoac/dnsmesh/pages -f build_type=workflow` para habilitar Pages con Actions source.
+- Workflow run #25283489693 verde en 24s (build 14s, deploy 10s).
+- Verificación HTTP: `/`, `/en/`, `/es/`, `/styles.css` → 200.
+- Verificación browser: render correcto, console limpia, morph animando, navbar island OK, footer two-tier OK, pathPrefix `/dnsmesh/` aplicado en todos los assets.
+
+**Sitio en vivo: https://dantoac.github.io/dnsmesh/**
 
 ### Files created/modified (parte 2)
 

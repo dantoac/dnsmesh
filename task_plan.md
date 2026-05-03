@@ -118,13 +118,13 @@ User decision (2026-05-03 sesión 4): el diagrama ASCII actual debe convertirse 
 
 User decision (2026-05-03 sesión 4): primer deploy en **GitHub Pages** para mostrar el sitio. Esto resuelve Phase 2 (hosting) y Phase 6 (target) por ahora; dominio definitivo se decide después.
 
-- [ ] Confirmar nombre del repo (decisión bloqueante para deploy real). Workflow ya soporta tanto `*.github.io` (sin prefix) como project page (con `/repo-name/`).
+- [x] Repo creado: **`dantoac/dnsmesh`** (público, en cuenta personal del usuario; se moverá a `AInvirion/` tras validación). URL pública: https://dantoac.github.io/dnsmesh/.
 - [x] Workflow `.github/workflows/deploy.yml` con `actions/configure-pages@v5` + `actions/upload-pages-artifact@v3` + `actions/deploy-pages@v4`. Lee `base_path` de configure-pages y lo inyecta como env `ELEVENTY_PATH_PREFIX` al build.
 - [x] `pathPrefix` configurable: `eleventy.config.js` lee `ELEVENTY_PATH_PREFIX` (default `/`) y lo expone como global data `basePath`. `pathPrefix` también pasado al return de Eleventy.
 - [x] Todos los paths absolutos en `src/_includes/base.webc` (favicon, CSS, JS, lang switchers, brand links, hreflang, redirect) usan `${basePath}…` interpolation. `src/index.njk` reescrito para usar `{{ basePath }}` en redirect, canonical, alternates y JS.
 - [x] Smoke test local: `npm run build` (prefix `/`) y `ELEVENTY_PATH_PREFIX="/dnsmesh-site/" npm run build` ambos generan paths consistentes (`/favicon.svg` vs `/dnsmesh-site/favicon.svg`, etc.).
-- [ ] Habilitar GitHub Pages en repo (Settings → Pages → Source: GitHub Actions). User-side.
-- [ ] Smoke test sobre la URL `*.github.io` post-deploy.
+- [x] GitHub Pages habilitado vía `gh api -X POST repos/dantoac/dnsmesh/pages -f build_type=workflow`.
+- [x] Smoke test post-deploy: `/`, `/en/`, `/styles.css` → 200. Render visual correcto en https://dantoac.github.io/dnsmesh/en/, cero errores de consola, morph activo, navbar island, footer two-tier OK.
 - [ ] Cache-bust query strings: ahora `?v=27` hardcodeado; mejorar a `?v={{ build.timestamp }}` en iteración futura (no bloqueante).
 
 ### Phase 7 — Adjacent surfaces (later)
