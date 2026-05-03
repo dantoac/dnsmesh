@@ -219,3 +219,51 @@ User confirmed: URL shape `/en/` + `/es/` (root redirects), template **WebC**, h
 3. Decisión de dominio público.
 4. Phase 7 (spec, getting-started, directory).
 
+## Session 6 — 2026-05-03 (revisión sistemática contra dnsmeshprotocol.org)
+
+### Done
+
+- Usuario compartió `https://dnsmeshprotocol.org` como fuente canónica explícita (más allá de `how-it-works.html`).
+- Verificación contra `how-it-works.html` reveló imprecisiones en el morph component:
+  - **Phase 1 query:** `_dnsmesh-id.bob.dmp.io` → corregido a `id-a1b2c3d4.bob.dmp.io`. La spec usa `id-<sha256(subject)[:16]>.<zone>`. El prefijo `_dnsmesh-` está reservado para *claim records*, no identidad.
+  - **Phase 3 chunk:** `_dnsmesh-chunk-7f.…` → corregido a `chunk-1-7f.alice.dmp.io`. Formato real `chunk-N-M.<zone>` y bajo la zona del **remitente** (la spec dice "records live under the sender's zone, and the recipient walks senders' zones").
+  - **Phase 3 dirección de flechas:** invertida para reflejar que el receptor consulta hacia atrás la zona del remitente (← TXT chunk, ← ciphertext).
+  - **`.dm-store` posición:** movido de col 3 (recipient lane) a col 1 (sender lane) en `styles.css`. El chunk se almacena en el nodo autoritativo del **remitente**, no del receptor.
+- Build limpio post-fixes (`npx @11ty/eleventy --quiet` → 3 archivos).
+- WebFetch a homepage canónica reveló más discrepancias (versión, endpoint, placeholders, enlaces externos) — registradas en `findings.md` para resolver con usuario.
+- Mapeadas todas las páginas canónicas del sitio para revisiones futuras (homepage + how-it-works + 4 guides + 12 protocol pages + 10 deployment pages + directory).
+- Phase 6.8 añadida a `task_plan.md`.
+
+### Pending decisions (waiting on user)
+
+1. **Versión actual del protocolo:** `site.json` declara `0.5.x`; canónica menciona `v0.2.0-beta`. ¿Cuál mostrar en el strip?
+2. **Endpoint en bloque terminal:** ¿quitar `https://` de `--endpoint https://dnsmesh.io` para alinear con canónica?
+3. **Domain placeholder:** ¿mantener `dmp.dnsmesh.io` (concreto) o cambiar a `<your-zone>` (canónico)?
+4. **`site.json` enlaces externos:**
+   - `spec` → migrar de `oscarvalenzuelab.github.io/DNSMeshProtocol/protocol` (Jekyll legacy) a `dnsmeshprotocol.org/protocol/spec.html`?
+   - `directory` → migrar de `ovalenzuela.com/DNSMeshProtocol/directory/` a `dnsmeshprotocol.org/directory/`?
+   - `github` → confirmar que `oscarvalenzuelab/DNSMeshProtocol` sigue siendo el repo upstream del protocolo.
+
+### Files modified this session
+
+- `src/_components/protocol-morph.webc` (Phase 1 ID label, Phase 3 chunk label + flechas)
+- `src/styles.css` (`.dm-store` col 3 → col 1, `justify-self: end` → `start`)
+- `task_plan.md` (Phase 6.8 nueva)
+- `findings.md` (sección "Verificación canónica" + tabla de discrepancias)
+- `progress.md` (esta entrada)
+
+### Done (parte 2 — usuario confirmó dnsmeshprotocol.org como canónico)
+
+- `src/_data/site.json`: `version` `0.5.x` → `0.2.0-beta`, `spec` → `https://dnsmeshprotocol.org/protocol/spec.html`, `directory` → `https://dnsmeshprotocol.org/directory/`. `github` y `security` ya alineados con canónica.
+- `src/en/index.webc` y `src/es/index.webc`: terminal `--domain dmp.dnsmesh.io --endpoint https://dnsmesh.io` → `--domain <your-zone> --endpoint dnsmesh.io`. Línea `dnsmesh send bob@dmp.dnsmesh.io` preservada (ejemplo de destinatario, no placeholder de zona propia).
+- Build verificado: `_site/en/index.html` renderiza `v0.2.0-beta` en el strip.
+- Phase 6.8 cerrada salvo validación visual + push.
+
+### Pending
+
+1. Validación visual del morph corregido + strip de versión en navegador (1280 + 375), EN + ES.
+2. Commit + push a `dantoac/dnsmesh` para deploy GitHub Pages.
+3. Migración del repo a `AInvirion/dnsmesh`.
+4. Decisión de dominio público propio.
+5. Phase 7 (spec, getting-started, directory).
+

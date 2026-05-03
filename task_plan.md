@@ -127,6 +127,40 @@ User decision (2026-05-03 sesión 4): primer deploy en **GitHub Pages** para mos
 - [x] Smoke test post-deploy: `/`, `/en/`, `/styles.css` → 200. Render visual correcto en https://dantoac.github.io/dnsmesh/en/, cero errores de consola, morph activo, navbar island, footer two-tier OK.
 - [x] Cache-bust query strings: `buildTime` global data en `eleventy.config.js` (`String(Date.now())`), inyectado en CSS y JS via `?v=${buildTime}`. Cada build produce un timestamp único (~13 dígitos epoch ms).
 
+### Phase 6.8 — Revisión sistemática contra dnsmeshprotocol.org 🔵 in_progress
+
+User decision (2026-05-03 sesión 6): pasar la landing por una verificación palabra-a-palabra contra `dnsmeshprotocol.org` (fuente canónica) y asegurar que el morph refleje fielmente el protocolo descrito en `how-it-works.html`.
+
+**Fixes ya aplicados en sesión 6 (parte 1):**
+- [x] Morph Phase 1 query: `_dnsmesh-id.bob.dmp.io` → `id-a1b2c3d4.bob.dmp.io` (formato canónico `id-<sha256(subject)[:16]>.<zone>`; el prefijo `_dnsmesh-` está reservado para *claim records*, no identidad)
+- [x] Morph Phase 3 chunk: `_dnsmesh-chunk-7f.…` → `chunk-1-7f.alice.dmp.io` (formato `chunk-N-M.<zone>` y bajo zona del **remitente** — la spec dice *"records live under the sender's zone, and the recipient walks senders' zones"*)
+- [x] Morph Phase 3 dirección de flechas invertida (← TXT chunk, ← ciphertext): el receptor consulta la zona del remitente, no al revés
+- [x] `.dm-store` movido de carril recipient (col 3) a sender (col 1) en `styles.css`: el chunk se almacena en el nodo autoritativo del remitente
+
+**Discrepancias resueltas (sesión 6, parte 2 — usuario confirmó dnsmeshprotocol.org como fuente de verdad):**
+- [x] **Versión:** `site.json` `0.5.x` → `0.2.0-beta`. Strip ahora renderiza `v0.2.0-beta · federation live since M9`.
+- [x] **Endpoint terminal:** `https://dnsmesh.io` → `dnsmesh.io` (EN + ES).
+- [x] **Domain placeholder:** `dmp.dnsmesh.io` → `<your-zone>` (EN + ES). Línea `dnsmesh send bob@dmp.dnsmesh.io` mantenida (es ejemplo de destinatario, no placeholder de zona propia).
+- [x] **`site.json` enlaces:**
+  - `spec` → `https://dnsmeshprotocol.org/protocol/spec.html` (canónica viva).
+  - `directory` → `https://dnsmeshprotocol.org/directory/`.
+  - `github` → confirmado `oscarvalenzuelab/DNSMeshProtocol` (canónica enlaza al mismo repo desde su nav).
+  - `security` → ya apuntaba al canónico, sin cambios.
+
+**Páginas canónicas mapeadas (para revisiones futuras):**
+- `/how-it-works.html` — protocolo y cripto (verificada parcialmente)
+- `/getting-started.html` — install + comandos
+- `/guide/{cli,identity,forward-secrecy,registration}.html`
+- `/protocol/{spec,wire-encoding,wire-format,crypto,routing,flows,security-model,threat-model,cluster,bootstrap,rotation,notifications}.html`
+- `/deployment/*.html` (10 páginas)
+- `/directory/`
+
+**Tareas pendientes:**
+- [x] Resolver las 4 discrepancias listadas
+- [x] Build + smoke test post-fixes (3 archivos generados, `v0.2.0-beta` confirmado en HTML)
+- [ ] Validación visual del morph corregido en navegador (1280 + 375)
+- [ ] Commit + push a `dantoac/dnsmesh` para deploy de Pages
+
 ### Phase 7 — Adjacent surfaces (later)
 
 - [ ] Spec page styling

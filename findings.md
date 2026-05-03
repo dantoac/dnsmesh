@@ -146,6 +146,54 @@ DNSMesh/
 7. Delete legacy `landing/` once both languages reach parity.
 8. Wire deploy to chosen target (Phase 6) — `_site/` is the artifact.
 
+## Verificación canónica contra dnsmeshprotocol.org (2026-05-03 sesión 6)
+
+Fuente: `https://dnsmeshprotocol.org/` (homepage) + `/how-it-works.html`. Tratar como autoritativo cuando hay conflicto con el copy local.
+
+### Hechos canónicos extraídos de how-it-works.html
+
+- **Identidad:** `id-<sha256(subject)[:16]>.<zone>` — bajo la zona del **propio usuario**, no con prefijo `_dnsmesh-`.
+- **Mailbox slots:** `slot-N.mb-{hash(bob)}.<alice's mesh_domain>` — viven en la zona del **remitente** (Alice), no del receptor. El receptor camina hacia atrás las zonas de los remitentes vía DNS recursivo.
+- **Chunks:** `chunk-*-*.<zone>` — bajo la zona del remitente.
+- **Claim records:** `_dnsmesh-claim-*.<zone>` — el prefijo `_dnsmesh-` está reservado para estos (first-contact), no para identity/chunks.
+- **Cripto:** Ed25519 (firma), X25519 (ECDH), ChaCha20-Poly1305 (AEAD), Argon2id (KDF), SHA-256 (hash + mailbox addressing).
+- **Flujo de escritura (M9):** RFC 2136 DNS UPDATE firmado con TSIG (RFC 8945), per-user TSIG keys con scope wildcard por owner-name (`id-…`, `slot-*.mb-*`, `chunk-*-*`).
+- **Cluster anti-entropy:** HTTP en `/v1/sync/digest` y `/v1/sync/pull` — *"don't fit cleanly into DNS"*.
+- **Limitaciones explícitas:** no garantiza entrega sub-segundo; metadata privacy contra el operador del nodo no está cubierta (traffic analysis leak).
+
+### Hechos canónicos extraídos de la homepage
+
+- Hero canónico: *"End-to-end encrypted messaging with no central server, no app store, no gatekeeper — delivered over DNS, on the relays and infrastructure the internet already runs on."*
+- Install command canónico:
+  ```
+  pipx install dnsmesh
+  dnsmesh init alice --domain <your-zone> --endpoint dnsmesh.io
+  dnsmesh tsig register --node dnsmesh.io
+  dnsmesh identity publish
+  ```
+  - **Endpoint sin `https://`** (la canónica no incluye el esquema)
+  - **`<your-zone>`** como placeholder, no `dmp.dnsmesh.io`
+- Versión actual: **v0.2.0-beta**. Hito futuro: **v1.0**.
+- Roadmap milestones citados: M10 (Notifications), M4.2–M4.4 (auditoría externa), M5.2 (mobile), M5.3 (web/WASM), M6 (traffic-analysis resistance).
+- RFCs explícitamente citados: 2136, 8945. (No 1035 — nuestro `findings.md` antiguo lo asumía como "RFC 1035 reads"; correcto pero no resaltado en canónica.)
+
+### Discrepancias landing local vs. canónica
+
+| Campo | Landing local | Canónica | Acción |
+|---|---|---|---|
+| Hero (EN) | "Encrypted mail, delivered by the same lookup that finds google.com." | "End-to-end encrypted messaging…" | Acceptable — copy creativa, mismo significado, agrega anchor concreto. Mantener. |
+| `site.version` | `0.5.x` | `v0.2.0-beta` | Verificar con usuario cuál es real |
+| `strip.federation` | "federation live since M9" | M9/M10 son hitos roadmap | Coexisten; OK siempre que la versión sea correcta |
+| Terminal `--endpoint` | `https://dnsmesh.io` | `dnsmesh.io` | Quitar `https://` para alinear con canónica |
+| Terminal `--domain` | `dmp.dnsmesh.io` | `<your-zone>` | Decisión: placeholder concreto vs. abstracto |
+| `site.json` `spec` | `oscarvalenzuelab.github.io/DNSMeshProtocol/protocol` (Jekyll legacy) | `dnsmeshprotocol.org/protocol/spec.html` | Actualizar a canónica viva |
+| `site.json` `directory` | `ovalenzuela.com/DNSMeshProtocol/directory/` | `dnsmeshprotocol.org/directory/` | Considerar redirigir a canónica |
+| Morph Phase 1 ID | `_dnsmesh-id.bob.dmp.io` | `id-<hash>.<zone>` | ✅ corregido sesión 6 |
+| Morph Phase 3 chunk | `_dnsmesh-chunk-7f` (recipient lane) | `chunk-N-M.<sender-zone>`, recipient walks sender zone | ✅ corregido sesión 6 (label + flechas) |
+| `.dm-store` posición | Col 3 (recipient) | Storage en nodo autoritativo del **sender** | ✅ corregido sesión 6 (col 1) |
+| Copy `diagram.ii` (mailbox slots) | "punteros que el sender escribe en su propia zona" | ✅ alineado con spec |
+| Copy `diagram.iii` (ciphertext) | RFC 8945 TSIG + RFC 2136 UPDATE | ✅ alineado con spec |
+
 ## Open questions for the user
 
 - **Hosting domain.** New domain vs. replacing `dnsmesh.io` root vs. subroute. Affects internal link targets and the relationship copy with the existing node page.
