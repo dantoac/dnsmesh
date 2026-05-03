@@ -296,3 +296,27 @@ footer {
   color: var(--ink-3);
 }
 footer .row { display: flex; justify-content: space-between; gap: 24px; }
+
+/* Mobile (≤720px) */
+@media (max-width: 720px) {
+  .top nav { gap: 1.1rem; font-size: .86rem; }
+  .strip .row { flex-wrap: wrap; gap: 10px 22px; }
+
+  .hero .grid { grid-template-columns: 1fr; gap: 2rem; }
+  .hero .ledger {
+    border-top: 0;
+    border-left: 1px solid var(--rule-2);
+    padding: 0 0 0 16px;
+  }
+
+  .anchor .shell { grid-template-columns: 1fr; gap: 1rem; }
+
+  .three-up { grid-template-columns: 1fr; }
+  .three-up .col {
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .three-up .col:last-child { border-bottom: 0; }
+
+  footer .row { flex-direction: column; gap: 8px; }
+}
