@@ -37,7 +37,7 @@ Single dark theme. No light theme. No theme toggle.
 | `--ink`       | `#e6e8ee` | cool cream | display + headings |
 | `--ink-2`     | `#c4c8d4` | grey-blue cream | body text |
 | `--ink-3`     | `#8089a0` | mid grey-blue | meta, datelines, secondary nav |
-| `--ink-4`     | `#4d5670` | low-emphasis grey-blue | diagram annotations, italic asides in dark blocks |
+| `--ink-4`     | `#7a8398` | low-emphasis grey-blue (AA on `--bg`) | diagram annotations, italic asides in dark blocks |
 | `--rule`      | `#1f2640` | hairline rule | section dividers on `--bg` |
 | `--rule-2`    | `#2a3252` | secondary rule | dividers inside `--bg-2`/`--bg-3` |
 | `--signal`    | `#a89066` | patinated brass / aged gold | accent: links, highlight italic, ledger numbers |
