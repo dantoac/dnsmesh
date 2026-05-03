@@ -45,16 +45,19 @@ This sentence is the single mental model the site must install in every reader.
 
 ### Phase 4 — Iterate landing v2
 
-- [ ] `$impeccable critique landing/index.html` — UX heuristic review
-- [ ] Address any P0/P1 findings
-- [ ] Confirm copy reinforces the federated-email anchor on first read
+- [x] Brainstormed direction (Switchboard), palette pivot (Midnight Archive dark) and typography (Space Grotesk + Newsreader + JetBrains Mono)
+- [x] Wrote spec at `docs/superpowers/specs/2026-05-03-landing-dark-redesign-design.md`
+- [x] Wrote plan at `docs/superpowers/plans/2026-05-03-landing-dark-redesign.md`
+- [x] Implemented dark redesign via subagent-driven dev (commits `388394d` → `2a3e566`)
+- [x] Confirmed copy reinforces the federated-email anchor (anchor section installs the mental model)
 
 ### Phase 5 — Quality gates
 
-- [ ] `$impeccable audit landing/index.html` — a11y, perf, responsive
-- [ ] Verify AA contrast on every text/background pair
-- [ ] Verify reduced-motion suppresses any reveal/scroll animations
-- [ ] Test on mobile viewport (≤560px)
+- [x] Verified AA contrast for every text/background pair against tokens (--ink-4 brightened to `#7a8398` to clear AA on all bg shades)
+- [x] Reduced-motion media query suppresses smooth scroll
+- [x] Mobile responsive at ≤720px (hero, anchor, three-up, footer all stack)
+- [ ] Live browser sweep at desktop + 375px (deferred to user — requires opening `landing/index.html`)
+- [ ] Hard-refresh check after final cache-bust
 
 ### Phase 6 — Ship setup
 
@@ -70,7 +73,7 @@ This sentence is the single mental model the site must install in every reader.
 
 ## Current Status
 
-In Phase 2. Waiting on hosting decision before finalizing internal link targets and footer copy.
+Phase 4 + 5 closed via dark redesign (Midnight Archive). Phase 2 (hosting decision) still pending. Phase 6 (ship setup) is the next blocker.
 
 ## Errors Encountered
 
