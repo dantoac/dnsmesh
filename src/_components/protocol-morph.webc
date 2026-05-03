@@ -1,9 +1,9 @@
 <div class="protocol-stage" aria-hidden="true">
   <div class="morph morph--dm">
     <div class="dm-lanes">
-      <span class="dm-lane-label">sender</span>
-      <span class="dm-lane-label">recursive DNS</span>
-      <span class="dm-lane-label">recipient</span>
+      <span class="dm-lane-label">alice · runs a node</span>
+      <span class="dm-lane-label">public dns chain</span>
+      <span class="dm-lane-label">bob · any resolver</span>
     </div>
 
     <div class="dm-rail dm-rail--1"></div>
@@ -17,11 +17,12 @@
       <span class="dm-arrow dm-arrow--reply">← pubkey + prekey</span>
     </div>
 
-    <!-- Phase 2: signed write -->
+    <!-- Phase 2: signed write — direct to alice's node, no recursive hop -->
     <div class="dm-phase dm-phase--2">
-      <span class="dm-arrow dm-arrow--update">DNS UPDATE + TSIG signed →</span>
-      <span class="dm-arrow dm-arrow--auth">authenticated →</span>
-      <span class="dm-store">store ciphertext chunk</span>
+      <span class="dm-arrow dm-arrow--update">DNS UPDATE + TSIG →</span>
+      <span class="dm-arrow dm-arrow--auth">verified at node</span>
+      <span class="dm-store">stored on alice's node</span>
+      <span class="dm-arrow dm-arrow--noop">— no recursive hop —</span>
     </div>
 
     <!-- Phase 3: recipient fetch (recipient walks sender's zone) -->
