@@ -156,3 +156,55 @@ a:hover { color: var(--signal-2); text-decoration-color: var(--signal-2); }
   color: var(--ink); margin: 0; max-width: 32ch;
 }
 .anchor p em { font-style: italic; color: var(--signal); }
+
+/* Diagram section */
+.diagram-section { padding: clamp(3rem, 7vw, 5rem) 0; }
+.diagram-section .header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 14px; margin-bottom: 26px;
+}
+.diagram-section h2 {
+  font-family: var(--sans); font-weight: 700;
+  font-size: clamp(1.6rem, 3vw, 2.1rem); letter-spacing: -0.03em;
+  margin: 0; color: var(--ink); scroll-margin-top: 5rem;
+}
+.diagram-section .header .ref {
+  font-family: var(--mono); font-size: .76rem;
+  color: var(--ink-3); letter-spacing: .04em;
+}
+
+.protocol {
+  font-family: var(--mono); font-size: .86rem; line-height: 1.85;
+  background: var(--bg-2); border: 1px solid var(--rule);
+  padding: 1.8rem 2rem; overflow-x: auto; white-space: pre;
+  color: var(--ink-3); margin: 0;
+}
+.protocol .q { color: var(--ink); }
+.protocol .r { color: var(--signal); font-weight: 500; }
+.protocol .w { color: var(--signal-2); font-weight: 500; }
+.protocol i { color: var(--ink-4); font-style: italic; }
+
+.three-up {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+  margin-top: 26px; border-top: 1px solid var(--rule);
+}
+.three-up .col {
+  padding: 20px 22px 24px;
+  border-right: 1px solid var(--rule);
+}
+.three-up .col:last-child { border-right: 0; }
+.three-up .num {
+  font-family: var(--mono); font-size: .76rem;
+  letter-spacing: .14em; color: var(--signal);
+  margin-bottom: 8px; display: block;
+}
+.three-up h3 {
+  font-family: var(--sans); font-weight: 700;
+  font-size: 1.05rem; letter-spacing: -0.02em;
+  margin: 0 0 8px; color: var(--ink);
+}
+.three-up p {
+  font-family: var(--serif); font-size: .98rem;
+  line-height: 1.55; color: var(--ink-2); margin: 0;
+}

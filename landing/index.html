@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=6">
+<link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body>
 <a class="skip" href="#protocol">Skip to protocol</a>
@@ -55,6 +55,47 @@
     <div class="shell">
       <span class="lbl">mental model</span>
       <p>Think of it as <em>federated email</em>, except it runs on <em>DNS</em> instead of SMTP.</p>
+    </div>
+  </section>
+
+  <section class="diagram-section" id="protocol">
+    <div class="shell">
+      <div class="header">
+        <h2>Three lookups carry a conversation.</h2>
+        <span class="ref">§ protocol shape</span>
+      </div>
+      <pre class="protocol" aria-label="Protocol exchange diagram">sender                  recursive DNS                  recipient
+   │                          │                            │
+   │   <span class="q">TXT _dnsmesh-id.bob.dmp.io</span>      │                            │
+   ├─────────────────────────►│ ──── cached, like any ────►│
+   │   <span class="r">pubkey + prekey</span>                │                            │
+   │◄─────────────────────────│                            │
+   │                          │                            │
+   │   <span class="w">DNS UPDATE  +  TSIG signed</span>     │                            │
+   ├─────────────────────────►│ ────── authenticated ─────►│  <i>store ciphertext chunk</i>
+   │                          │                            │
+   │                          │   <span class="q">TXT _dnsmesh-chunk-7f.…</span>     │
+   │                          │◄───────── plain ───────────┤
+   │                          │   <span class="r">ciphertext</span>                  │
+   │                          │ ──────────────────────────►│</pre>
+
+      <div class="three-up">
+        <div class="col">
+          <span class="num">i.</span>
+          <h3>Identity</h3>
+          <p>A name in DNS, not in an app store. Public TXT records under the recipient&rsquo;s domain hold the long-term Ed25519 and X25519 keys.</p>
+        </div>
+        <div class="col">
+          <span class="num">ii.</span>
+          <h3>Mailbox slots</h3>
+          <p>Forward-secret prekeys advertised the same way. Anyone on the public DNS chain can fetch them; only the holder can answer.</p>
+        </div>
+        <div class="col">
+          <span class="num">iii.</span>
+          <h3>Ciphertext</h3>
+          <p>Chunked, signed via RFC 8945 TSIG, written with RFC 2136 DNS UPDATE. The recursive chain only ever sees opaque bytes.</p>
+        </div>
+      </div>
     </div>
   </section>
 </main>
