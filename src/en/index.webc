@@ -28,7 +28,7 @@ layout: base.webc
           <span @text="i18n[lang].hero.ledger.lookups"></span>
         </div>
         <div class="ledger-row">
-          <span class="ledger-num">N</span>
+          <span class="ledger-num">3</span>
           <span @text="i18n[lang].hero.ledger.nodes"></span>
         </div>
         <div class="ledger-row">
