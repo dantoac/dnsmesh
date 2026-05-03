@@ -20,6 +20,7 @@ export default function (eleventyConfig) {
 
   const pathPrefix = process.env.ELEVENTY_PATH_PREFIX || "/";
   eleventyConfig.addGlobalData("basePath", pathPrefix.endsWith("/") ? pathPrefix : pathPrefix + "/");
+  eleventyConfig.addGlobalData("buildTime", String(Date.now()));
 
   return {
     pathPrefix,

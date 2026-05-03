@@ -93,7 +93,7 @@ This sentence is the single mental model the site must install in every reader.
 - [x] Live browser sweep on both languages — EN+ES paridad confirmada @ 1280, 768, 375. Navbar scroll-morph dispara correctamente (`body.scrolled-past-hero` activa la isla). Lang switcher EN/ES emite los pills correctos en mobile menu. **Bug encontrado:** `.island-menu` (`src/styles.css:461`) carece de `z-index` — el panel queda por debajo del hero al abrirse en 375px (texto del hero se filtra encima). Backdrop-filter blur no protege porque el stacking context es el de `.navbar-island` (z-index:100) pero al ser absolute dentro, el contenido scrolled puede quedar encima si tiene su propio contexto. Falta también `<link rel="icon">` (favicon 404).
 - [x] **FIX:** `z-index: 210` añadido + cambio de `var(--surface-90)` (10% transparente, hero se filtraba) a `var(--surface-elevated)` sólido. Backdrop-filter eliminado del panel del dropdown — frosted glass se reserva para la barra del navbar. Verificado en 375 con CSS `?v=23`.
 - [x] Favicon: `src/favicon.svg` (cuadrado patinated brass sobre iron-gall ink), passthrough en `eleventy.config.js`, `<link rel="icon">` en `base.webc`. 200 OK.
-- [ ] Delete legacy `landing/` once user confirms parity in browser
+- [x] Delete legacy `landing/` (already absent on disk + git as of session 5; no-op confirmed)
 
 ### Phase 6.5 quirks logged for future work
 
@@ -125,7 +125,7 @@ User decision (2026-05-03 sesión 4): primer deploy en **GitHub Pages** para mos
 - [x] Smoke test local: `npm run build` (prefix `/`) y `ELEVENTY_PATH_PREFIX="/dnsmesh-site/" npm run build` ambos generan paths consistentes (`/favicon.svg` vs `/dnsmesh-site/favicon.svg`, etc.).
 - [x] GitHub Pages habilitado vía `gh api -X POST repos/dantoac/dnsmesh/pages -f build_type=workflow`.
 - [x] Smoke test post-deploy: `/`, `/en/`, `/styles.css` → 200. Render visual correcto en https://dantoac.github.io/dnsmesh/en/, cero errores de consola, morph activo, navbar island, footer two-tier OK.
-- [ ] Cache-bust query strings: ahora `?v=27` hardcodeado; mejorar a `?v={{ build.timestamp }}` en iteración futura (no bloqueante).
+- [x] Cache-bust query strings: `buildTime` global data en `eleventy.config.js` (`String(Date.now())`), inyectado en CSS y JS via `?v=${buildTime}`. Cada build produce un timestamp único (~13 dígitos epoch ms).
 
 ### Phase 7 — Adjacent surfaces (later)
 

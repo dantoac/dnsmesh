@@ -189,3 +189,33 @@ User confirmed: URL shape `/en/` + `/es/` (root redirects), template **WebC**, h
 - `src/index.njk` (redirect con `{{ basePath }}`)
 - `eleventy.config.js` (passthrough favicon, pathPrefix env, basePath global data)
 - `.github/workflows/deploy.yml` (nuevo)
+
+## Session 5 — 2026-05-03 (precisión técnica + cache-bust)
+
+### Done
+
+- Verificación contra `https://dnsmeshprotocol.org/how-it-works.html` (canonical):
+  - Identidad (i): TXT firmados con Ed25519 + X25519 ✅ correcto.
+  - **Mailbox slots (ii): IMPRECISIÓN encontrada y corregida.** El copy decía "Forward-secret prekeys advertised the same way" — eso conflataba mailbox slots con prekeys. En el protocolo real los prekeys viajan junto al registro de identidad (phase 1 del morph ya lo refleja con "pubkey + prekey"); los mailbox slots (`slot-N.mb-{hash(bob)}.<alice-zone>`) son **manifiestos por destinatario que el remitente escribe en su propia zona** y el receptor sondea. Reescrito en EN+ES.
+  - Ciphertext chunks (iii): RFC 8945 TSIG + RFC 2136 DNS UPDATE ✅ correcto.
+  - Strip "federation live since M9", warn pre-audit, comandos `dnsmesh init / tsig register / identity publish / refresh-prekeys / send / recv`, Argon2id derivation: todos verificados contra canonical.
+  - Morph component sin cambios — ya era preciso (phase 1 entrega pubkey+prekey, phase 2 signed write con TSIG, phase 3 recipient fetch).
+- Legacy `landing/`: ya no existe en disco ni en git (limpiado en sesión previa). Phase 6.5 task marcada como no-op completada.
+- **Cache-bust dinámico:** `eleventy.config.js` añade `buildTime: String(Date.now())` como global data. `base.webc` reemplaza `?v=27` por `?v=${buildTime}` en CSS y JS. Build local genera `?v=1777823675945` (epoch ms), distinto en cada `npm run build`. CDN/proxy/browser invalidados automáticamente en cada deploy.
+- ES translation: usuario confirmó que está OK, no requiere review pass.
+
+### Files modified this session
+
+- `src/_data/i18n/en.json` (diagram.ii body)
+- `src/_data/i18n/es.json` (diagram.ii title + body)
+- `eleventy.config.js` (`buildTime` global data)
+- `src/_includes/base.webc` (`?v=${buildTime}` en CSS y JS)
+- `task_plan.md`, `progress.md` (esta entrada)
+
+### Pending
+
+1. Validación visual fina por parte del usuario en https://dantoac.github.io/dnsmesh/ tras deploy.
+2. Migración del repo a `AInvirion/dnsmesh`.
+3. Decisión de dominio público.
+4. Phase 7 (spec, getting-started, directory).
+

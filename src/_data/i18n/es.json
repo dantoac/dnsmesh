@@ -52,8 +52,8 @@
     },
     "ii": {
       "tag": "ii.",
-      "title": "Buzones efímeros",
-      "body": "Prekeys con secrecía hacia adelante anunciados de la misma forma. Cualquiera en la cadena DNS pública puede tomarlos; solo el titular puede responder."
+      "title": "Buzones",
+      "body": "Punteros por destinatario que el remitente escribe en su propia zona. Anuncian que hay un mensaje esperando y dónde viven sus fragmentos &mdash; UPDATEs firmados al entrar, TXT plano al salir."
     },
     "iii": {
       "tag": "iii.",

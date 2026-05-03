@@ -53,7 +53,7 @@
     "ii": {
       "tag": "ii.",
       "title": "Mailbox slots",
-      "body": "Forward-secret prekeys advertised the same way. Anyone on the public DNS chain can fetch them; only the holder can answer."
+      "body": "Per-recipient pointers the sender writes into their own zone. They announce that a message is waiting and where its chunks live &mdash; signed UPDATEs going in, plain TXT coming back out."
     },
     "iii": {
       "tag": "iii.",
