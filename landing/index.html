@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=7">
+<link rel="stylesheet" href="styles.css?v=8">
 </head>
 <body>
 <a class="skip" href="#protocol">Skip to protocol</a>
@@ -97,6 +97,12 @@
         </div>
       </div>
     </div>
+  </section>
+
+  <section class="prose-section">
+    <h2>Reads are open. Writes are signed.</h2>
+    <p>That asymmetry is what removes the gatekeeper. Anyone, on any network, can resolve any user&rsquo;s identity, mailbox slots, and chunks &mdash; the records are public TXT entries served by ordinary DNS. Mutations, on the other hand, are RFC&nbsp;2136 DNS UPDATE packets signed with an RFC&nbsp;8945 TSIG key issued per user.</p>
+    <p>One HTTPS call mints the key on first registration; after that, no HTTPS hop is involved in publishing identity, refreshing prekeys, or delivering chunks. Every node in the federation accepts those updates from any user whose key it knows about, which means <em>no single node is canonical</em> and none of them can hold a conversation hostage.</p>
   </section>
 </main>
 </body>
