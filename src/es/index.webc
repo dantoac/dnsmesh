@@ -101,7 +101,7 @@ pipx install dnsmesh
 read -rs <span class="v">DMP_PASSPHRASE</span>; export <span class="v">DMP_PASSPHRASE</span>
 
 <span class="c"># mint a TSIG key, then publish your identity over signed DNS UPDATE</span>
-dnsmesh <span class="k">init</span> alice <span class="p">--domain</span> dmp.dnsmesh.io <span class="p">--endpoint</span> <span class="s">https://dnsmesh.io</span>
+dnsmesh <span class="k">init</span> alice <span class="p">--domain</span> <span class="s">&lt;your-zone&gt;</span> <span class="p">--endpoint</span> dnsmesh.io
 dnsmesh tsig <span class="k">register</span> <span class="p">--node</span> dnsmesh.io
 dnsmesh identity <span class="k">publish</span>
 dnsmesh identity <span class="k">refresh-prekeys</span>

@@ -1011,7 +1011,7 @@ body.scrolled-past-hero .navbar-island::before { opacity: 1; }
 .dm-arrow--chunk   { grid-column: 2 / 4; justify-self: start; padding-left: 0.5rem; }
 .dm-arrow--plain   { grid-column: 2 / 4; justify-self: start; padding-left: 0.5rem; }
 .dm-arrow--deliver { grid-column: 2 / 4; justify-self: start; padding-left: 0.5rem; }
-.dm-store          { grid-column: 3 / 4; justify-self: end; }
+.dm-store          { grid-column: 1 / 2; justify-self: start; }
 .dm-phase--1 { animation: dm-phase-1 var(--dm-cycle) infinite; }
 .dm-phase--2 { animation: dm-phase-2 var(--dm-cycle) infinite; }
 .dm-phase--3 { animation: dm-phase-3 var(--dm-cycle) infinite; }
@@ -1081,7 +1081,7 @@ body.scrolled-past-hero .navbar-island::before { opacity: 1; }
 /* Store badge in phase 2 */
 .dm-store {
   display: inline-block;
-  justify-self: end;
+  justify-self: start;
   font-style: italic;
   color: var(--accent);
   border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
